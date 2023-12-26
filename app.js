@@ -26,13 +26,18 @@ app.use(
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
+  // res.header(
+  //   "Access-Control-Allow-Header",
+  //   "Origin,X-Request-With,context-Type,Accept,Authorization"
+  // );
+
   res.header(
-    "Access-Control-Allow-Header",
+    "Access-Control-Allow-Headers",
     "Origin,X-Request-With,context-Type,Accept,Authorization"
   );
   res.header(
     "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE,PATCH, OPTIONS"
+    "GET, POST, PUT, DELETE, PATCH, OPTIONS"
   );
 
   if (req.method === "OPTIONS") {
