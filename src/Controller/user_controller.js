@@ -453,7 +453,7 @@ exports.Heart_Beat = (req, res) => {
           success(" HeartBeats DAta", {
             user: user[0],
             permission: myPermissions,
-            user_data: userData,
+            user_data: userData[0],
             user_lookups: {
               game_data: userGame,
               teams: userTeams,
