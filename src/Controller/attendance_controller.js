@@ -354,7 +354,6 @@ exports.Edit_Leave_Status = (req, res) => {
   const { leave_id, approve, deny } = req.body;
   const { UserID } = req.userData;
   approved_time = moment().format("YYYY-MM-DD HH:mm:ss");
-  
 
   if (!leave_id) {
     return res.status(400).json(error("leave_id is mandatory", {}));
@@ -367,16 +366,19 @@ exports.Edit_Leave_Status = (req, res) => {
     return res.status(400).json(error("Invalid Data Provided!", {}));
   }
 
-  const statusToUpdate = (!isApprove && !isDeny) ? null : (isApprove ? 2 : 3);
-  
- 
+  const statusToUpdate = !isApprove && !isDeny ? null : isApprove ? 2 : 3;
 
-  Attendance.EditLeaveStatus(UserID, leave_id, statusToUpdate,approved_time, (err, data) => {
-    if (err) {
-      return res.status(200).json(error("Not set!!", {}));
-    } else {
-      return res.status(200).json(success("Updated", { data }));
+  Attendance.EditLeaveStatus(
+    UserID,
+    leave_id,
+    statusToUpdate,
+    approved_time,
+    (err, data) => {
+      if (err) {
+        return res.status(200).json(error("Not set!!", {}));
+      } else {
+        return res.status(200).json(success("Updated", { data }));
+      }
     }
-  });
+  );
 };
-

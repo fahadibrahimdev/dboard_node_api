@@ -301,10 +301,12 @@ class Attendance {
           " AND ";
       }
       if (!!body.start_day) {
+        const start_day = new Date(body.start_day);  
+        const startDateUTC = start_day.toISOString();
         myWhereQuery =
           myWhereQuery +
           "user_attendances.start_time >= '" +
-          body.start_day +
+          startDateUTC +
           "' AND ";
       }
       if (!!body.end_day) {
