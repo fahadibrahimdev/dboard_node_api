@@ -301,12 +301,10 @@ class Attendance {
           " AND ";
       }
       if (!!body.start_day) {
-        const start_day = new Date(body.start_day);  
-        const startDateUTC = start_day.toISOString();
         myWhereQuery =
           myWhereQuery +
           "user_attendances.start_time >= '" +
-          startDateUTC +
+          body.start_day +
           "' AND ";
       }
       if (!!body.end_day) {
@@ -357,6 +355,8 @@ class Attendance {
       console.log("\n\nNext Line");
 
       const myData = await Query.execute(myDataCompleteQuery);
+
+      
       const myTotalData = await Query.execute(myTotalCompleteQuery);
 
       const totalPage = Math.ceil(myTotalData[0].count / body.limit);
