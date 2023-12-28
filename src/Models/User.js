@@ -68,7 +68,7 @@ class User {
   static async FindUserByid(body, result) {
     try {
       console.log("FindUserByid");
-      var myQuery = "SELECT * FROM users WHERE id =" + body.UserID;
+      var myQuery = "SELECT * FROM users WHERE deleted_by IS NULL AND  id =  " + body.UserID;
       const myData = await Query.execute(myQuery);
       const res = {
         data: myData,

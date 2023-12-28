@@ -99,6 +99,11 @@ exports.Login_UserV2 = (req, res) => {
     return res
       .status(400)
       .json(error("user_name/password/device_token/platfoam not provided", {}));
+  }
+  else if (req.body.user_name.length < 3) {
+    return res.status(400).json(error("user_name can't be less than 3", {}));
+  } else if (req.body.password.length < 6) {
+    return res.status(400).json(error("password can't be less than 6", {}));
   } else {
     var params = {
       UserName: req.body.user_name,
@@ -258,9 +263,9 @@ exports.Heart_Beat = (req, res) => {
     User.FindUserByid(params, (err, user) => {
       if (err) {
         return res.status(200).json(error("Error while fetching User", {}));
-      } else if (user.length < 1) {
+      } else if (user.data.length < 1) {
         return res
-          .status(200)
+          .status(400)
           .json(
             error("ID not found, Try an Alternating ID or Contact Support", {})
           );
@@ -455,7 +460,7 @@ exports.Heart_Beat = (req, res) => {
 
         res.status(200).json(
           success(" HeartBeats DAta", {
-            user: user[0],
+            user: user.data[0],
             permission: myPermissions,
             user_data: userData[0],
             user_lookups: {
