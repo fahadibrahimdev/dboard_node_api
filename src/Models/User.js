@@ -3,7 +3,6 @@ const sql = require("../Config/MYSQL_Configuration");
 const { param } = require("../Routes/transactionRouter");
 const Query = require("../Helpers/queryHelper");
 class User {
-  
   constructor(User) {
     this.id = User.id;
     this.full_name = User.full_name;
@@ -38,7 +37,9 @@ class User {
         body.UserName +
         "' AND password = '" +
         body.Password +
-        "'";
+        "'" 
+        +
+        " AND deleted_by IS NULL";
       const res = await Query.execute(myQuery);
 
       result(null, res);
@@ -103,7 +104,6 @@ class User {
       result(e, null);
     }
   }
-  
 
   static FindCurrentRegisteredUserByUserName(UserName, result) {
     console.log("FindCurrentRegisteredUser");
@@ -262,9 +262,15 @@ class User {
       console.log("LOGOUT!!");
 
       var myQuery =
-      "UPDATE `user_activity` SET `is_session_completed` = 1, `last_logout_time` ='" +
-      body.Logout_time + "', `last_logout_platfoam` = '"+body.platfoam +"' where user_id =" +
-      body.UserID + " AND is_session_completed = 0 AND last_login_platfoam = '" + body.platfoam + "';";
+        "UPDATE `user_activity` SET `is_session_completed` = 1, `last_logout_time` ='" +
+        body.Logout_time +
+        "', `last_logout_platfoam` = '" +
+        body.platfoam +
+        "' where user_id =" +
+        body.UserID +
+        " AND is_session_completed = 0 AND last_login_platfoam = '" +
+        body.platfoam +
+        "';";
       const res = await Query.executeWithParams(myQuery);
 
       result(null, res);
@@ -272,10 +278,10 @@ class User {
       result(e, null);
     }
   }
-  static FindUserid2(body,result) {
+  static FindUserid2(body, result) {
     console.log("FindUserByid");
-    var myQuery = "SELECT id FROM users WHERE id = " + body.user_id 
-   
+    var myQuery = "SELECT id FROM users WHERE id = " + body.user_id;
+
     sql.query(myQuery, (err, res) => {
       if (res) {
         result(null, res);
@@ -283,14 +289,17 @@ class User {
     });
   }
 
-
-
   static async DeletedUser(params, result) {
     try {
       console.log("DeletedUser");
 
       var myQuery = `UPDATE users SET deleted_by	 = ? , deleted_time = ? WHERE user_name = ? AND password = ?`;
-      var myParam = [params.Deleted_By,params.Deleted_Time, params.UserName, params.Password];
+      var myParam = [
+        params.Deleted_By,
+        params.Deleted_Time,
+        params.UserName,
+        params.Password,
+      ];
       const res = await Query.executeWithParams(myQuery, myParam);
 
       result(null, res);
@@ -300,11 +309,6 @@ class User {
   }
 }
 
-
-  
-
-
 console.log("User Model");
 
 module.exports = User;
-

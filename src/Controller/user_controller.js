@@ -20,6 +20,10 @@ exports.Login_User = (req, res) => {
     return res
       .status(400)
       .json(error("user_name/password/device_token/platfoam not provided", {}));
+  } else if (req.body.user_name.length < 3) {
+    return res.status(400).json(error("user_name can't be less than 3", {}));
+  } else if (req.body.password.length < 6) {
+    return res.status(400).json(error("password can't be less than 6", {}));
   } else {
     var params = {
       UserName: req.body.user_name,
