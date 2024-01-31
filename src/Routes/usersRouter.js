@@ -29,5 +29,4 @@ router.post("/change_password", check_auth, user_controller.Chnage_Password);
 router.post("/logout", user_controller.Logout);
 router.delete("/delete_user", user_controller.Delete_User);
 
-
 module.exports = router;

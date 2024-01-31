@@ -128,7 +128,6 @@ exports.Edit_Attendance_Status = (req, res) => {
   } else {
     const approve = /true/i.test(req.body.approve);
     const deny = /true/i.test(req.body.deny);
-    var params = {};
 
     if (
       (!!approve === true && !!deny === true) ||

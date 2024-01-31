@@ -40,6 +40,11 @@ exports.Login_User = (req, res) => {
             .json(
               error("No Account Exists against this user_name/password", {})
             );
+        } else if (user.length > 0 && user[0].new_user_req === 1) {
+          return res
+            .status(403)  //403 code implies that access is forbidden 
+            // due to other reasons, such as insufficient permissions or authentication failure.
+            .json(error("Currently your account request is in pending status. Kindly try again later!"));
         } else if (user.length > 0) {
           const token = jwt.sign(
             {
@@ -88,7 +93,7 @@ exports.Login_User = (req, res) => {
 };
 
 exports.Login_UserV2 = (req, res) => {
-  console.log("Login");
+  console.log("Login V2");
 
   if (
     !!req.body.user_name == false ||
@@ -120,6 +125,11 @@ exports.Login_UserV2 = (req, res) => {
             .json(
               error("No Account Exists against this user_name/password", {})
             );
+        } else if (user.length > 0 && user[0].new_user_req === 1) {
+          return res
+            .status(403)  //403 code implies that access is forbidden 
+            // due to other reasons, such as insufficient permissions or authentication failure.
+            .json(error("Currently your account request is in pending status. Kindly try again later!"));
         } else if (user.length > 0) {
           const token = jwt.sign(
             {
@@ -169,7 +179,7 @@ exports.Login_UserV2 = (req, res) => {
 };
 
 exports.Signup_User = (req, res) => {
-  console.log("SignUp");
+  console.log("SignUp API called!");
 
   if (
     !!req.body.user_name == false ||
@@ -207,6 +217,7 @@ exports.Signup_User = (req, res) => {
               ? req.body.is_super_user
               : 0,
             role: !!req.body.role ? req.body.role : 1,
+            new_user_req: !!req.body.new_user_req ? req.body.new_user_req : 1,
           });
 
           User.Register(newUser, (err, data) => {
@@ -602,7 +613,7 @@ exports.Logout = (req, res) => {
 };
 
 exports.Delete_User = (req, res) => {
-  console.log("Login");
+  console.log("Delete");
 
   if (!!req.body.user_name == false || !!req.body.password == false) {
     return res.status(400).json(error("user_name/password not provided", {}));

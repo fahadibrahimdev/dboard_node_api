@@ -16,6 +16,7 @@ class User {
     this.is_super_user = User.is_super_user;
     this.image = User.image;
     this.role = User.role;
+    this.new_user_req = User.new_user_req;
   }
   static GetAllUsers(result) {
     console.log("GetAllUsers");
@@ -37,8 +38,7 @@ class User {
         body.UserName +
         "' AND password = '" +
         body.Password +
-        "'" 
-        +
+        "'" +
         " AND deleted_by IS NULL";
       const res = await Query.execute(myQuery);
 
@@ -68,7 +68,9 @@ class User {
   static async FindUserByid(body, result) {
     try {
       console.log("FindUserByid");
-      var myQuery = "SELECT * FROM users WHERE deleted_by IS NULL AND  id =  " + body.UserID;
+      var myQuery =
+        "SELECT * FROM users WHERE deleted_by IS NULL AND  id =  " +
+        body.UserID;
       const myData = await Query.execute(myQuery);
       const res = {
         data: myData,
