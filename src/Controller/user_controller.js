@@ -7,6 +7,7 @@ const Permission = require("../Models/Permission.js");
 const LookUp = require("../Models/LookUp.js");
 const { success, error } = require("../Response/API-Response.js");
 const promise = require("bcrypt/promises.js");
+const user_details = require("../Models/User_details.js");
 
 exports.Login_User = (req, res) => {
   console.log("Login");
@@ -182,7 +183,7 @@ exports.Signup_User = (req, res) => {
   console.log("SignUp API called!");
 
   if (
-    !!req.body.user_name == false ||
+    !!req.body.user_name == false && req.body.user_name.length ||
     !!req.body.password == false ||
     !!req.body.full_name == false
   ) {
@@ -289,11 +290,11 @@ exports.Heart_Beat = (req, res) => {
       let myTeams = [];
       let myTransactionTypes = [];
       let myShift = [];
-
       let userTeams = [];
       let userGame = [];
       let userShift = [];
       let Status = [];
+      let userdetails = [];
 
       let firstPromise = () => {
         var params = {
@@ -451,6 +452,22 @@ exports.Heart_Beat = (req, res) => {
           });
         });
       };
+      let twelvethPromise = () => {
+        var params = {
+          UserID: req.userData.UserID,
+        };
+        return new Promise((resolve, reject) => {
+          user_details.GetAlluser_details(params,(err,userdetailsdata) => {
+            if (!err) {
+              userdetails  = userdetailsdata;
+            } else {
+              userdetails = [];
+            }
+            resolve("Completed!");
+          });
+        });
+      };
+
 
       // Async function to perform execution of all promise
       let promiseExecution = async () => {
@@ -466,6 +483,7 @@ exports.Heart_Beat = (req, res) => {
           ninethPromise(),
           tenthPromise(),
           elventhPromise(),
+          twelvethPromise(),
         ]);
         console.log(promise);
 
@@ -473,11 +491,11 @@ exports.Heart_Beat = (req, res) => {
           success(" HeartBeats DAta", {
             user: user.data[0],
             permission: myPermissions,
-            user_data: userData[0],
-            user_lookups: {
+              user_lookups: {
               game_data: userGame,
               teams: userTeams,
               shift_data: userShift,
+              all_notifications_seen:userdetails,
             },
 
             system_lookups: {
