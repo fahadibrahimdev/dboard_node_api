@@ -42,10 +42,16 @@ exports.Login_User = (req, res) => {
               error("No Account Exists against this user_name/password", {})
             );
         } else if (user.length > 0 && user[0].new_user_req === 1) {
-          return res
-            .status(403)  //403 code implies that access is forbidden 
-            // due to other reasons, such as insufficient permissions or authentication failure.
-            .json(error("Currently your account request is in pending status. Kindly try again later!"));
+          return (
+            res
+              .status(403) //403 code implies that access is forbidden
+              // due to other reasons, such as insufficient permissions or authentication failure.
+              .json(
+                error(
+                  "Currently your account request is in pending status. Kindly try again later!"
+                )
+              )
+          );
         } else if (user.length > 0) {
           const token = jwt.sign(
             {
@@ -105,8 +111,7 @@ exports.Login_UserV2 = (req, res) => {
     return res
       .status(400)
       .json(error("user_name/password/device_token/platfoam not provided", {}));
-  }
-  else if (req.body.user_name.length < 3) {
+  } else if (req.body.user_name.length < 3) {
     return res.status(400).json(error("user_name can't be less than 3", {}));
   } else if (req.body.password.length < 6) {
     return res.status(400).json(error("password can't be less than 6", {}));
@@ -127,10 +132,16 @@ exports.Login_UserV2 = (req, res) => {
               error("No Account Exists against this user_name/password", {})
             );
         } else if (user.length > 0 && user[0].new_user_req === 1) {
-          return res
-            .status(403)  //403 code implies that access is forbidden 
-            // due to other reasons, such as insufficient permissions or authentication failure.
-            .json(error("Currently your account request is in pending status. Kindly try again later!"));
+          return (
+            res
+              .status(403) //403 code implies that access is forbidden
+              // due to other reasons, such as insufficient permissions or authentication failure.
+              .json(
+                error(
+                  "Currently your account request is in pending status. Kindly try again later!"
+                )
+              )
+          );
         } else if (user.length > 0) {
           const token = jwt.sign(
             {
@@ -183,7 +194,7 @@ exports.Signup_User = (req, res) => {
   console.log("SignUp API called!");
 
   if (
-    !!req.body.user_name == false && req.body.user_name.length ||
+    (!!req.body.user_name == false && req.body.user_name.length) ||
     !!req.body.password == false ||
     !!req.body.full_name == false
   ) {
@@ -457,17 +468,16 @@ exports.Heart_Beat = (req, res) => {
           UserID: req.userData.UserID,
         };
         return new Promise((resolve, reject) => {
-          user_details.GetAlluser_details(params,(err,userdetailsdata) => {
+          user_details.Get_All_User_Details(params, (err, userdetailsdata) => {
             if (!err) {
-              userdetails  = userdetailsdata;
+              userdetails = userdetailsdata[0].flags !== 0;
             } else {
-              userdetails = [];
+              userdetails = "fasle";
             }
             resolve("Completed!");
           });
         });
       };
-
 
       // Async function to perform execution of all promise
       let promiseExecution = async () => {
@@ -490,12 +500,12 @@ exports.Heart_Beat = (req, res) => {
         res.status(200).json(
           success(" HeartBeats DAta", {
             user: user.data[0],
+            all_notifications_seen: userdetails,
             permission: myPermissions,
-              user_lookups: {
+            user_lookups: {
               game_data: userGame,
               teams: userTeams,
               shift_data: userShift,
-              all_notifications_seen:userdetails,
             },
 
             system_lookups: {
@@ -549,6 +559,7 @@ exports.Update_Profile = (req, res) => {
     });
   }
 };
+
 exports.Chnage_Password = (req, res) => {
   console.log("Chnage_Password");
 
@@ -684,5 +695,24 @@ exports.Delete_User = (req, res) => {
         }
       }
     );
+  }
+};
+exports.Update_Flags = (req, res) => {
+  console.log("Update_Flags");
+
+  if (!!req.userData.UserID == false) {
+    return res.status(400).json(error("UserID is mandatory", {}));
+  } else {
+    var params = {
+      UserID: req.userData.UserID,
+    };
+
+    user_details.Update_User_Flags_Details(params, (err, data) => {
+      if (!err) {
+        return res.status(200).json(success("User Veiw All Notification  :"));
+      } else {
+        return res.status(400).json(error("ERROR :", { err }));
+      }
+    });
   }
 };

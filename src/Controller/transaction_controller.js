@@ -7,7 +7,8 @@ exports.User_transaction = async (req, res) => {
 
   if (!!req.userData.user_id == false) {
     return res.status(401).json(error("User ID (Auth) can't null", {}));
-  } else {
+  } 
+  else {
     var params = {
       UserID: req.userData.UserID,
     };

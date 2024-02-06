@@ -7,18 +7,32 @@ class user_details {
     this.id = user_details.id;
     this.flags = user_details.flags;
   }
-  static async GetAlluser_details(body,result) {
+  static async Get_All_User_Details(body, result) {
     try {
       console.log("Get All user_details");
-       var myQuery = 'SELECT id,flags,news_id FROM user_details where user_id ='+ body.UserID;
-       const res = await Query.execute(myQuery);
-       
-       result(null, res);
-     } catch (e) {
-       result(e, null);
-     }
+      var myQuery =
+        "SELECT flags FROM user_details where user_id =" +
+        body.UserID;
+      const res = await Query.execute(myQuery);
 
-   
+      result(null, res);
+    } catch (e) {
+      result(e, null);
+    }
+  }
+
+  static async Update_User_Flags_Details(body, result) {
+    try {
+      console.log("Update_User_Falgs_Details");
+      var myQuery =
+        "UPDATE user_details SET flags = CASE WHEN flags = 1 THEN 0 ELSE flags END WHERE user_id = " +
+        body.UserID;
+      const res = await Query.execute(myQuery);
+
+      result(null, res);
+    } catch (e) {
+      result(e, null);
+    }
   }
 }
 
