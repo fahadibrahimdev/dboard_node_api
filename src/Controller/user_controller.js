@@ -61,8 +61,9 @@ exports.Login_User = (req, res) => {
             },
             process.env.JWT_KEY,
             {
-              expiresIn: "30d",
+              expiresIn: "40d",
             }
+
           );
 
           var params2 = {
@@ -151,7 +152,7 @@ exports.Login_UserV2 = (req, res) => {
             },
             process.env.JWT_KEY,
             {
-              expiresIn: "30d",
+              expiresIn: "40d",
             }
           );
 
@@ -245,7 +246,7 @@ exports.Signup_User = (req, res) => {
                 },
                 process.env.JWT_KEY,
                 {
-                  expiresIn: "30d",
+                  expiresIn: "40d",
                 }
               );
               User.IntersionInPermission(data.insertId, (err, data2) => {
@@ -472,7 +473,7 @@ exports.Heart_Beat = (req, res) => {
             if (!err) {
               userdetails = userdetailsdata[0].flags !== 0;
             } else {
-              userdetails = "fasle";
+              userdetails = false;
             }
             resolve("Completed!");
           });

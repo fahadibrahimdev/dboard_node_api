@@ -1,0 +1,54 @@
+-----UAT Script (2024-Feb-07)------
+For triggers of user_details table + one to one mapping relation 
+
+
+============ CREATED TABLE SCRIPT =============
+CREATE TABLE `user_details` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `user_id` INT NOT NULL,
+    `flags` BOOLEAN NOT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)
+) ENGINE = InnoDB;
+
+============ ALTER TABLE  USER_DETAILS  UNIQUE  =============
+
+ALTER TABLE user_detail
+ADD CONSTRAINT user_id_index UNIQUE (user_id);
+
+
+============ CREATE TRIGGER FOR INSERT A RECORD IN USER_DETAILS WHEN ROW INSERTED IN NEWS TABLE  =============
+
+
+
+DELIMITER //
+
+CREATE TRIGGER news_insert_trigger
+AFTER INSERT ON news
+FOR EACH ROW
+BEGIN
+    UPDATE user_details
+    SET flags = 1;
+END;
+//
+
+DELIMITER ;
+
+
+
+============ CREATE TRIGGER FOR INSERT A RECORD IN USER_DETAILS WHEN ROW INSERTED IN USER TABLE  =============
+
+
+
+
+DELIMITER //
+
+CREATE TRIGGER add_user_details AFTER INSERT ON users
+FOR EACH ROW
+BEGIN
+    INSERT INTO user_details (user_id, flags)
+    VALUES (NEW.id, 1);
+END//
+
+DELIMITER ;
+
