@@ -718,3 +718,29 @@ exports.Update_Flags = (req, res) => {
     });
   }
 };
+exports.Get_Users_By_Teams_Id = (req, res) => {
+  console.log("Get_Users_By_Teams_Id");
+
+  if (!!req.body.team_id == false) {
+    return res.status(400).json(error("TeamsID is mandatory", {}));
+  } else {
+    var params = {
+      team_id : req.body.team_id,
+    };
+
+    User.Get_Users_By_Teams_Id(params, (err, data) => {
+      if (!err) {
+
+        if(!!data && data.length === 0){
+          return res.status(200).json(success("NO Users Found for this Teams ID!"));
+        } else {
+          return res.status(200).json(success("User In This Teams:",data));
+        }
+        
+      } 
+      else {
+        return res.status(400).json(error("ERROR :", { err }));
+      }
+    });
+  }
+};

@@ -29,5 +29,6 @@ router.post("/change_password", check_auth, user_controller.Chnage_Password);
 router.post("/logout", user_controller.Logout);
 router.delete("/delete_user", user_controller.Delete_User);
 router.post("/update_news_flags",check_auth,user_controller.Update_Flags);
+router.get("/get_users_by_team_id",check_auth,user_controller.Get_Users_By_Teams_Id);
 
 module.exports = router;

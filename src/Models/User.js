@@ -290,7 +290,7 @@ class User {
       } else result(err, null);
     });
   }
-
+  
   static async DeletedUser(params, result) {
     try {
       console.log("DeletedUser");
@@ -303,6 +303,18 @@ class User {
         params.Password,
       ];
       const res = await Query.executeWithParams(myQuery, myParam);
+
+      result(null, res);
+    } catch (e) {
+      result(e, null);
+    }
+  }
+  static async Get_Users_By_Teams_Id(body, result) {
+    try {
+      console.log("Get_Users_By_Teams_Id");
+
+      var myQuery = "SELECT ul.user_id,u.user_name, u.full_name, ul.lookup_id AS team_id FROM user_lookups ul JOIN users u ON ul.user_id = u.id WHERE ul.lookup_id IN ("+ body.team_id +");"
+      const res = await Query.executeWithParams(myQuery);
 
       result(null, res);
     } catch (e) {
