@@ -503,6 +503,7 @@ exports.Heart_Beat = (req, res) => {
             user: user.data[0],
             all_notifications_seen: userdetails,
             permission: myPermissions,
+            user_data: userData[0],
             user_lookups: {
               game_data: userGame,
               teams: userTeams,
@@ -553,7 +554,7 @@ exports.Update_Profile = (req, res) => {
     };
     User.Update_Profile(params, (err, _updateprofile) => {
       if (err) {
-        return res.status(400).json(error("NOT UPDATED "));
+        return res.status(400).json(error("USER NAME ALREADY IN USE"));
       } else {
         return res.status(200).json(success(" UPDATED"));
       }

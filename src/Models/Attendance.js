@@ -269,7 +269,7 @@ class Attendance {
 
       if (!!body.user_id) {
         myWhereQuery =
-          myWhereQuery + "user_attendances.user_id = " + body.user_id + " AND ";
+          myWhereQuery + "user_attendances.user_id IN (" + body.user_id + ")AND ";
       }
       if (!!body.team_id) {
         myWhereQuery =
