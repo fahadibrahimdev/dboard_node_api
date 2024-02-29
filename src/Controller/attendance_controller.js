@@ -230,11 +230,17 @@ exports.Filter_Attendance = (req, res) => {
 };
 
 exports.User_Working_Time = (req, res) => {
-  if (!!req.body.user_id == false) {
-    return res.status(400).json(error("user_id  is mandatory", {}));
+  if (
+    !!req.body.user_id == false &&
+    !!req.body.team_id == false &&
+    !!req.body.shift_id == false
+  ) {
+    return res.status(400).json(error("user_id,team_id,shift_id One of them  is mandatory", {}));
   } else {
     var params = {
       user_id: req.body.user_id,
+      shift_id: req.body.shift_id,
+      team_id: req.body.team_id,
     };
 
     if (!!req.body.start_date || !!req.body.end_date) {

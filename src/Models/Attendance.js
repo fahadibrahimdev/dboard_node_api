@@ -385,7 +385,19 @@ class Attendance {
         " FROM user_attendances ";
       var myWhereQuery =
         "WHERE end_time IS NOT NULL AND user_id = " + params.user_id + " AND ";
-      var myGroupBy = " GROUP BY user_id;";
+    if(!!params.shift_id){
+      myWhereQuery =
+      myWhereQuery +
+      " shift_id ="   + params.shift_id +
+      " AND ";
+    }
+
+    if(!!params.team_id){
+      myWhereQuery =
+      myWhereQuery +
+      " team_id ="   + params.team_id +
+      " AND ";
+    }
 
       if (!!params.start_date && !!params.end_date) {
         myWhereQuery =
@@ -411,7 +423,7 @@ class Attendance {
       if (lastFour === "AND ") {
         myWhereQuery = myWhereQuery.slice(0, -4);
       }
-      var myTotalCompleteQuery = myQuery + myWhereQuery + myGroupBy;
+      var myTotalCompleteQuery = myQuery + myWhereQuery 
 
       const res = await Query.execute(myTotalCompleteQuery);
 

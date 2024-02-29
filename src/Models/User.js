@@ -313,7 +313,8 @@ class User {
     try {
       console.log("Get_Users_By_Teams_Id");
 
-      var myQuery = "SELECT ul.user_id,u.user_name, u.full_name, ul.lookup_id AS team_id FROM user_lookups ul JOIN users u ON ul.user_id = u.id WHERE ul.lookup_id IN ("+ body.team_id +");"
+      var myQuery = "SELECT ul.user_id, u.user_name, u.full_name, ul.lookup_id AS team_id, l.code AS team_code FROM user_lookups ul JOIN users u ON ul.user_id = u.id JOIN lookups l ON ul.lookup_id = l.id  WHERE ul.lookup_id IN ("+ body.team_id +") ;"
+      
       const res = await Query.executeWithParams(myQuery);
 
       result(null, res);
