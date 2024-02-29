@@ -388,15 +388,15 @@ class Attendance {
     if(!!params.shift_id){
       myWhereQuery =
       myWhereQuery +
-      " shift_id ="   + params.shift_id +
-      " AND ";
+      " shift_id  IN("   + params.shift_id +
+      ") AND ";
     }
 
     if(!!params.team_id){
       myWhereQuery =
       myWhereQuery +
-      " team_id ="   + params.team_id +
-      " AND ";
+      " team_id IN("   + params.team_id +
+      ") AND ";
     }
 
       if (!!params.start_date && !!params.end_date) {
