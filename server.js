@@ -35,6 +35,9 @@ if (cluster.isPrimary) {
   );
 
   app.use((req, res, next) => {
+    if (cluster.worker) {
+      console.log(`Request handled by CPU core: ${cluster.worker.process.pid % totalCpu}`);
+    }
     res.header("Access-Control-Allow-Origin", "*");
     res.header(
       "Access-Control-Allow-Headers",
@@ -77,6 +80,6 @@ if (cluster.isPrimary) {
   });
 
   app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+    console.log(`Worker ${cluster.worker.id} listening on port ${port}`);
   });
 }
