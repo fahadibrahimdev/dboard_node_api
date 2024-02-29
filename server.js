@@ -12,6 +12,7 @@ const remarksRouter = require("./src/Routes/remarksRouter");
 const totalCpu = os.cpus().length; // Corrected method name and variable name
 console.log("totalCpu:", totalCpu); // Corrected console log message
 
+
 if (cluster.isPrimary) {
   // Fork workers.
   for (let i = 0; i < totalCpu; i++) {
@@ -19,7 +20,7 @@ if (cluster.isPrimary) {
   }
 } else {
   const app = express(); 
-  const port =3000;
+  const port = process.env.PORT || 3000
   app.use(morgan("dev"));
 
 // for parsing application/json
