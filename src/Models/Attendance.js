@@ -382,14 +382,19 @@ class Attendance {
         "SELECT user_id,start_time,end_time,TIME_FORMAT(SEC_TO_TIME(SUM(TIME_TO_SEC(TIMEDIFF(end_time, start_time)))), '%H:%i:%s') AS total_time_spent" +
         " FROM user_attendances ";
       var myWhereQuery =
-        "WHERE end_time IS NOT NULL AND user_id = " + params.user_id + " AND ";
+        "WHERE end_time IS NOT NULL AND  ";
     if(!!params.shift_id){
       myWhereQuery =
       myWhereQuery +
       " shift_id  IN("   + params.shift_id +
       ") AND ";
     }
-
+    if(!!params.user_id){
+      myWhereQuery =
+      myWhereQuery +
+      " shift_id  IN("   + params.user_id +
+      ") AND ";
+    }
     if(!!params.team_id){
       myWhereQuery =
       myWhereQuery +
