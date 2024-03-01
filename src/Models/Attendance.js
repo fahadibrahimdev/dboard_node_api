@@ -351,9 +351,7 @@ class Attendance {
         myBaseDataQuery + myJoinQuery + myWhereQuery + mySortQuery;
       var myTotalCompleteQuery = myBaseTotalQuery + myWhereQuery;
 
-      console.log("\n\nfahad complete query: ", myDataCompleteQuery);
-      console.log("\n\nNext Line");
-
+      
       const myData = await Query.execute(myDataCompleteQuery);
 
       
