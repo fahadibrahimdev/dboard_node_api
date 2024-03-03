@@ -266,12 +266,12 @@ class User {
       var myQuery =
         "UPDATE `user_activity` SET `is_session_completed` = 1, `last_logout_time` ='" +
         body.Logout_time +
-        "', `last_logout_platfoam` = '" +
-        body.platfoam +
+        "', `last_logout_platform` = '" +
+        body.platform +
         "' where user_id =" +
         body.UserID +
-        " AND is_session_completed = 0 AND last_login_platfoam = '" +
-        body.platfoam +
+        " AND is_session_completed = 0 AND last_login_platform = '" +
+        body.platform +
         "';";
       const res = await Query.executeWithParams(myQuery);
 
@@ -290,7 +290,7 @@ class User {
       } else result(err, null);
     });
   }
-  
+
   static async DeletedUser(params, result) {
     try {
       console.log("DeletedUser");
@@ -313,8 +313,11 @@ class User {
     try {
       console.log("Get_Users_By_Teams_Id");
 
-      var myQuery = "SELECT ul.user_id, u.user_name, u.full_name, ul.lookup_id AS team_id, l.code AS team_code FROM user_lookups ul JOIN users u ON ul.user_id = u.id JOIN lookups l ON ul.lookup_id = l.id  WHERE ul.lookup_id IN ("+ body.team_id +") ;"
-      
+      var myQuery =
+        "SELECT ul.user_id, u.user_name, u.full_name, ul.lookup_id AS team_id, l.code AS team_code FROM user_lookups ul JOIN users u ON ul.user_id = u.id JOIN lookups l ON ul.lookup_id = l.id  WHERE ul.lookup_id IN (" +
+        body.team_id +
+        ") ;";
+
       const res = await Query.executeWithParams(myQuery);
 
       result(null, res);

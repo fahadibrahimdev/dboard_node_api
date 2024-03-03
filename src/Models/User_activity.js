@@ -8,8 +8,8 @@ class User_activity {
     this.id = User_activity.id;
     this.last_login_time = User_activity.last_login_time;
     this.last_logout_time = User_activity.last_logout_time;
-    this.last_login_platfoam = User_activity.last_login_platfoam;
-    this.last_logout_platfoam = User_activity.last_logout_platfoam;
+    this.last_login_platform = User_activity.last_login_platform;
+    this.last_logout_platform = User_activity.last_logout_platform;
     this.device_token = User_activity.device_token;
     this.device_info = User_activity.device_info;
     this.is_session_completed = User_activity.is_session_completed;
@@ -22,9 +22,11 @@ class User_activity {
       var myQuery =
         "UPDATE `user_activity` SET  `is_session_completed` = 1, `last_logout_time` ='" +
         body.Logout_time +
-        "' , `last_logout_platfoam` = 'FORCE' where user_id =" +
-        body.UserID + " AND is_session_completed = 0 AND last_login_platfoam = '" +
-        body.Platfoam + "';";
+        "' , `last_logout_platform` = 'FORCE' where user_id =" +
+        body.UserID +
+        " AND is_session_completed = 0 AND last_login_platform = '" +
+        body.Platform +
+        "';";
 
       const res = await Query.executeWithParams(myQuery);
 
@@ -38,18 +40,17 @@ class User_activity {
       console.log("insert_user_activity ");
 
       var myQuery =
-        "INSERT INTO user_activity (device_token,last_login_platfoam,user_id,last_login_time,device_info) " +
+        "INSERT INTO user_activity (device_token,last_login_platform,user_id,last_login_time,device_info) " +
         "VALUE ( '" +
         body.DeviceToken +
         "','" +
-        body.Platfoam +
+        body.platform +
         "','" +
         body.UserID +
         "','" +
         body.Login_time +
         "','" +
         body.DeviceInfo +
-        
         "');";
 
       const res = await Query.executeWithParams(myQuery);

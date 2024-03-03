@@ -20,7 +20,7 @@ exports.Login_User = (req, res) => {
   ) {
     return res
       .status(400)
-      .json(error("user_name/password/device_token/platfoam not provided", {}));
+      .json(error("user_name/password/device_token/platform not provided", {}));
   } else if (req.body.user_name.length < 3) {
     return res.status(400).json(error("user_name can't be less than 3", {}));
   } else if (req.body.password.length < 6) {
@@ -63,7 +63,6 @@ exports.Login_User = (req, res) => {
             {
               expiresIn: "40d",
             }
-
           );
 
           var params2 = {
@@ -107,11 +106,11 @@ exports.Login_UserV2 = (req, res) => {
     !!req.body.user_name == false ||
     !!req.body.password == false ||
     !!req.body.device_token == false ||
-    !!req.body.platfoam == false
+    !!req.body.platform == false
   ) {
     return res
       .status(400)
-      .json(error("user_name/password/device_token/platfoam not provided", {}));
+      .json(error("user_name/password/device_token/platform not provided", {}));
   } else if (req.body.user_name.length < 3) {
     return res.status(400).json(error("user_name can't be less than 3", {}));
   } else if (req.body.password.length < 6) {
@@ -159,7 +158,7 @@ exports.Login_UserV2 = (req, res) => {
           var params2 = {
             DeviceToken: req.body.device_token,
             DeviceInfo: !!req.body.device_info ? req.body.device_info : "",
-            Platfoam: req.body.platfoam,
+            Platform: req.body.platform,
             Login_time: new Date().toISOString(),
             Logout_time: new Date().toISOString(),
             UserID: user[0].id,
@@ -619,12 +618,12 @@ exports.Chnage_Password = (req, res) => {
 exports.Logout = (req, res) => {
   console.log("Logout");
 
-  if (!!req.body.user_id == false || !!req.body.platfoam == false) {
-    return res.status(400).json(error("user_id/platfoam not provided", {}));
+  if (!!req.body.user_id == false || !!req.body.platform == false) {
+    return res.status(400).json(error("user_id/platform not provided", {}));
   } else {
     var params = {
       UserID: req.body.user_id,
-      platfoam: req.body.platfoam,
+      platform: req.body.platform,
       Logout_time: new Date().toISOString(),
       Deviceinfo: !!req.body.DeviceInfo ? req.body.DeviceInfo : "",
     };
@@ -725,20 +724,21 @@ exports.Get_Users_By_Teams_Id = (req, res) => {
     return res.status(400).json(error("TeamsID is mandatory", {}));
   } else {
     var params = {
-      team_id : req.body.team_id,
+      team_id: req.body.team_id,
     };
 
     User.Get_Users_By_Teams_Id(params, (err, data) => {
       if (!err) {
-
-        if(!!data && data.length === 0){
-          return res.status(200).json(success("NO Users Found for this Teams ID!"));
+        if (!!data && data.length === 0) {
+          return res
+            .status(200)
+            .json(success("NO Users Found for this Teams ID!"));
         } else {
-          return res.status(200).json(success(`User In This Teams  ${req.body.team_id}:`, data));
+          return res
+            .status(200)
+            .json(success(`User In This Teams  ${req.body.team_id}:`, data));
         }
-        
-      } 
-      else {
+      } else {
         return res.status(400).json(error("ERROR :", { err }));
       }
     });
