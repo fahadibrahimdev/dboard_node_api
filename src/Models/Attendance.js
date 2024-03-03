@@ -271,6 +271,10 @@ class Attendance {
         myWhereQuery =
           myWhereQuery + "user_attendances.user_id IN (" + body.user_id + ")AND ";
       }
+      if(!!body.status){
+        myWhereQuery =
+        myWhereQuery + "user_attendances.status IN (" + body.status + ")AND ";
+      }
       if (!!body.team_id) {
         myWhereQuery =
           myWhereQuery +
@@ -389,6 +393,15 @@ class Attendance {
       " shift_id  IN("   + params.shift_id +
       ") AND ";
     }
+    if(!!params.status){
+      myWhereQuery =
+      myWhereQuery +
+      "  status  IN(" + params.status +
+      ") AND ";
+    }
+
+
+   
     if(!!params.user_id){
       myWhereQuery =
       myWhereQuery +
