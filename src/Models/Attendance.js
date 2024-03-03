@@ -392,7 +392,7 @@ class Attendance {
     if(!!params.user_id){
       myWhereQuery =
       myWhereQuery +
-      " shift_id  IN("   + params.user_id +
+      " user_id  IN("   + params.user_id +
       ") AND ";
     }
     if(!!params.team_id){
