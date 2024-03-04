@@ -10,7 +10,7 @@ class News {
   static async GetAllNews(result) {
     try {
       console.log("GetAllNews");
-       var myQuery = `SELECT * FROM news ORDER BY id DESC;`
+       var myQuery = `SELECT * FROM news   WHERE is_active=1  ORDER BY id DESC ;`
        const res = await Query.execute(myQuery);
        
        result(null, res);
