@@ -325,6 +325,24 @@ class User {
       result(e, null);
     }
   }
+
+
+  static async Get_Users_Data_Excel( result) {
+      try {
+        console.log("Get_Users_Data_Excel");
+  
+        var myQuery =
+          "SELECT * FROM `users`"
+  
+        const res = await Query.execute(myQuery);
+  
+        result(null, res);
+      } catch (e) {
+        result(e, null);
+      }
+    }
+  
+  
 }
 
 console.log("User Model");

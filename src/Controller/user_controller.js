@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-const multer = require("multer");
 const News = require("../Models/News.js");
 const User = require("../Models/User.js");
 const User_activity = require("../Models/User_activity.js");
@@ -8,6 +7,7 @@ const LookUp = require("../Models/LookUp.js");
 const { success, error } = require("../Response/API-Response.js");
 const promise = require("bcrypt/promises.js");
 const user_details = require("../Models/User_details.js");
+const Excel = require("exceljs");
 
 exports.Login_User = (req, res) => {
   console.log("Login");
@@ -744,3 +744,81 @@ exports.Get_Users_By_Teams_Id = (req, res) => {
     });
   }
 };
+
+exports.Export_User_Data = async (req, res) => {
+  try {
+    // Retrieve user data from the User module
+    User.Get_Users_Data_Excel((err, data) => {
+      if (err) {
+        console.error("Error exporting user data:", err);
+        res.status(500).send("Internal Server Error");
+        return;
+      }
+
+      // Create a new workbook
+      const workbook = new Excel.Workbook();
+      const worksheet = workbook.addWorksheet("Data");
+
+      // Define column headers
+      worksheet.columns = [
+      {header: "id", key: "id"},
+      {header: "full_name",key: "full_name"},
+      {header: "user_name",key: "user_name"},
+      {header: "password",key: "password"},
+      {header: "device_token" ,key: "device_token"},
+      {header: "platform", key: "platform"},
+      {header: "email",key: "email"},
+      {header: "mobile",key: "mobile"},
+      {header: "dob",key: "dob"},
+      {header: "is_super_user",key: "is_super_user"},
+      {header: "image", key: "image"},
+      {header: "role",key: "role"},
+      {header: "deleted_time",key: "deleted_time"},
+      {header: "deleted_by",key: "deleted_by"},
+      {header: "new_user_req",key: "new_user_req"},
+        
+      ];
+
+      
+      
+      
+      // worksheet.addRow([{}]);
+
+      
+     
+
+      // // Add data from the User module to the worksheet
+      data.forEach((row) => {
+
+        console.log("useer data row: ", row);
+        worksheet.addRow(row);
+      });
+
+      // Set content disposition to attachment with the filename 'data.xlsx'
+      res.setHeader("Content-Disposition", 'attachment; filename="data.xlsx"');
+      // Set the content type to Excel
+      res.setHeader(
+        "Content-Type",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      );
+      
+
+      // Save the workbook to the response stream
+      workbook.xlsx
+        .write(res)
+        .then(() => {
+          console.log("File sent successfully.");
+          res.end();
+        })
+        .catch((writeErr) => {
+          console.error("Error sending Excel file:", writeErr);
+          res.status(500).send("Internal Server Error");
+        });
+    });
+  } catch (error) {
+    console.error("Error exporting user data:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+
