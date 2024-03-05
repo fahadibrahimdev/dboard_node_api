@@ -216,7 +216,7 @@ exports.Filter_Attendance = (req, res) => {
     start_day: req.body.start_day,
     end_day: req.body.end_day,
     data_type: req.body.data_type,
-    status:req.body.status
+    status: req.body.status,
   };
 
   Attendance.FilterAttendances(params, (err, data) => {
@@ -236,14 +236,15 @@ exports.User_Working_Time = (req, res) => {
     !!req.body.team_id == false &&
     !!req.body.shift_id == false
   ) {
-    return res.status(400).json(error("user_id,team_id,shift_id One of them  is mandatory", {}));
-  } 
-  else {
+    return res
+      .status(400)
+      .json(error("user_id,team_id,shift_id One of them  is mandatory", {}));
+  } else {
     var params = {
       user_id: req.body.user_id,
       shift_id: req.body.shift_id,
       team_id: req.body.team_id,
-      status:req.body.status
+      status: req.body.status,
     };
 
     if (!!req.body.start_date || !!req.body.end_date) {

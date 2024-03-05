@@ -326,23 +326,164 @@ class User {
     }
   }
 
+  static async Get_Users_Data_Excel(body,result) {
+    try {
+      console.log("Get_Users_Data_Excel");
+      var myBaseDataQuery =
+        "SELECT " +
+        "shifts.code AS shift_name, " +
+        "teams.code AS teams_name, " +
+        "u.user_name AS user_name, " +
+        "u.full_name AS full_name, " +
+        "user_attendances.shift_id, " +
+        "user_attendances.team_id, " +
+        "user_attendances.user_id, " +
+        "user_attendances.id, " +
+        "user_attendances.start_time, " +
+        "user_attendances.end_time, " +
+        "user_attendances.status, " +
+        "user_attendances.leaves, " +
+        "user_attendances.comments, " +
+        "user_attendances.created_by, " +
+        "ua.full_name AS created_name, " +
+        "user_attendances.deleted_by, " +
+        "uau.full_name AS deleted_name, " +
+        "user_attendances.approved_by, " +
+        "uaau.full_name AS approved_name, " +
+        "user_attendances.modify_by, " +
+        "uaaau.full_name AS modify_name, " +
+        "user_attendances.created_time, " +
+        "user_attendances.deleted_time, " +
+        "user_attendances.approved_time, " +
+        "user_attendances.modify_time " +
+        "FROM user_attendances ";
 
-  static async Get_Users_Data_Excel( result) {
-      try {
-        console.log("Get_Users_Data_Excel");
-  
-        var myQuery =
-          "SELECT * FROM `users`"
-  
-        const res = await Query.execute(myQuery);
-  
-        result(null, res);
-      } catch (e) {
-        result(e, null);
+      var myBaseTotalQuery = "SELECT COUNT(*) AS count FROM user_attendances ";
+      var myJoinQuery =
+        "LEFT JOIN lookups AS shifts ON user_attendances.shift_id = shifts.id " +
+        "LEFT JOIN lookups AS teams ON user_attendances.team_id = teams.id " +
+        "LEFT JOIN users AS u ON user_attendances.user_id = u.id " +
+        "LEFT JOIN users AS ua ON user_attendances.created_by = ua.id " +
+        "LEFT JOIN users AS uau ON user_attendances.deleted_by = uau.id " +
+        "LEFT JOIN users AS uaau ON user_attendances.approved_by = uaau.id " +
+        "LEFT JOIN users AS uaaau ON user_attendances.modify_by = uaaau.id ";
+      var myWhereQuery = "";
+
+      if (!!body.user_id) {
+        myWhereQuery =
+          myWhereQuery +
+          "user_attendances.user_id IN (" +
+          body.user_id +
+          ")AND ";
       }
+      if (!!body.status) {
+        myWhereQuery =
+          myWhereQuery + "user_attendances.status IN (" + body.status + ")AND ";
+      }
+      if (!!body.team_id) {
+        myWhereQuery =
+          myWhereQuery +
+          " user_attendances.team_id IN (" +
+          body.team_id +
+          ") AND ";
+      }
+      if (!!body.shift_id) {
+        myWhereQuery =
+          myWhereQuery +
+          "user_attendances.shift_id = " +
+          body.shift_id +
+          " AND ";
+      }
+      if (!!body.lead_user_id) {
+        myWhereQuery =
+          myWhereQuery +
+          "transaction.lead_user_id = " +
+          body.lead_user_id +
+          " AND ";
+      }
+
+      if (!!body.is_active) {
+        myWhereQuery =
+          myWhereQuery +
+          "user_attendances.is_active = " +
+          body.is_active +
+          " AND ";
+      }
+      if (!!body.start_day) {
+        myWhereQuery =
+          myWhereQuery +
+          "user_attendances.start_time >= '" +
+          body.start_day +
+          "' AND ";
+      }
+      if (!!body.end_day) {
+        myWhereQuery =
+          myWhereQuery +
+          "(user_attendances.end_time <= '" +
+          body.end_day +
+          "' OR user_attendances.end_time IS NULL ) AND ";
+      }
+      if (body.data_type == "attendance") {
+        myWhereQuery = myWhereQuery + "user_attendances.leaves = 0" + " AND ";
+      }
+      if (body.data_type == "leave") {
+        myWhereQuery = myWhereQuery + "user_attendances.leaves = 1" + " AND ";
+      }
+
+      var lastFour =
+        myWhereQuery.length > 4
+          ? myWhereQuery.substr(myWhereQuery.length - 4)
+          : "";
+
+      if (lastFour === "AND ") {
+        myWhereQuery = "WHERE " + myWhereQuery.slice(0, -4);
+      }
+
+      // var mySortQuery = "";
+
+      // if (!!body.sortBy) {
+      //   mySortQuery = mySortQuery + " ORDER BY " + body.sortBy;
+      // }
+      // if (!!body.sortDirection) {
+      //   mySortQuery = mySortQuery + " " + body.sortDirection;
+      // }
+
+      // if (!!body.limit) {
+      //   mySortQuery = mySortQuery + " LIMIT " + body.limit;
+      // }
+      // if (!!body.page) {
+      //   const offset = (body.page - 1) * body.limit;
+      //   mySortQuery = mySortQuery + " OFFSET " + offset;
+      // }
+
+      var myDataCompleteQuery =
+        // myBaseDataQuery + myJoinQuery + myWhereQuery + mySortQuery;
+        myBaseDataQuery + myJoinQuery + myWhereQuery ;
+      var myTotalCompleteQuery = myBaseTotalQuery + myWhereQuery;
+
+      const myData = await Query.execute(myDataCompleteQuery);
+
+      // const myTotalData = await Query.execute(myTotalCompleteQuery);
+
+      // const totalPage = Math.ceil(myTotalData[0].count / body.limit);
+      // const totalRecord = myTotalData[0].count;
+
+      const res = {
+        attendances: myData,
+        // pagination: {
+        //   totalRecord,
+        //   totalPages: totalPage,
+        //   limit: body.limit,
+        //   currentPage: body.page,
+        // },
+      };
+
+      result(null, res);
+  
+    } catch (e) {
+      result(e, null);
     }
-  
-  
+  }
 }
 
 console.log("User Model");

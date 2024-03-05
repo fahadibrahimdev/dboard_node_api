@@ -269,11 +269,14 @@ class Attendance {
 
       if (!!body.user_id) {
         myWhereQuery =
-          myWhereQuery + "user_attendances.user_id IN (" + body.user_id + ")AND ";
+          myWhereQuery +
+          "user_attendances.user_id IN (" +
+          body.user_id +
+          ")AND ";
       }
-      if(!!body.status){
+      if (!!body.status) {
         myWhereQuery =
-        myWhereQuery + "user_attendances.status IN (" + body.status + ")AND ";
+          myWhereQuery + "user_attendances.status IN (" + body.status + ")AND ";
       }
       if (!!body.team_id) {
         myWhereQuery =
@@ -355,10 +358,8 @@ class Attendance {
         myBaseDataQuery + myJoinQuery + myWhereQuery + mySortQuery;
       var myTotalCompleteQuery = myBaseTotalQuery + myWhereQuery;
 
-      
       const myData = await Query.execute(myDataCompleteQuery);
 
-      
       const myTotalData = await Query.execute(myTotalCompleteQuery);
 
       const totalPage = Math.ceil(myTotalData[0].count / body.limit);
@@ -385,35 +386,24 @@ class Attendance {
       var myQuery =
         "SELECT user_id,start_time,end_time,TIME_FORMAT(SEC_TO_TIME(SUM(TIME_TO_SEC(TIMEDIFF(end_time, start_time)))), '%H:%i:%s') AS total_time_spent" +
         " FROM user_attendances ";
-      var myWhereQuery =
-        "WHERE end_time IS NOT NULL AND  ";
-    if(!!params.shift_id){
-      myWhereQuery =
-      myWhereQuery +
-      " shift_id  IN("   + params.shift_id +
-      ") AND ";
-    }
-    if(!!params.status){
-      myWhereQuery =
-      myWhereQuery +
-      "  status  IN(" + params.status +
-      ") AND ";
-    }
+      var myWhereQuery = "WHERE end_time IS NOT NULL AND  ";
+      if (!!params.shift_id) {
+        myWhereQuery =
+          myWhereQuery + " shift_id  IN(" + params.shift_id + ") AND ";
+      }
+      if (!!params.status) {
+        myWhereQuery =
+          myWhereQuery + "  status  IN(" + params.status + ") AND ";
+      }
 
-
-   
-    if(!!params.user_id){
-      myWhereQuery =
-      myWhereQuery +
-      " user_id  IN("   + params.user_id +
-      ") AND ";
-    }
-    if(!!params.team_id){
-      myWhereQuery =
-      myWhereQuery +
-      " team_id IN("   + params.team_id +
-      ") AND ";
-    }
+      if (!!params.user_id) {
+        myWhereQuery =
+          myWhereQuery + " user_id  IN(" + params.user_id + ") AND ";
+      }
+      if (!!params.team_id) {
+        myWhereQuery =
+          myWhereQuery + " team_id IN(" + params.team_id + ") AND ";
+      }
 
       if (!!params.start_date && !!params.end_date) {
         myWhereQuery =
@@ -439,7 +429,7 @@ class Attendance {
       if (lastFour === "AND ") {
         myWhereQuery = myWhereQuery.slice(0, -4);
       }
-      var myTotalCompleteQuery = myQuery + myWhereQuery 
+      var myTotalCompleteQuery = myQuery + myWhereQuery;
 
       const res = await Query.execute(myTotalCompleteQuery);
 
@@ -545,6 +535,7 @@ class Attendance {
     //   } else result(err, null);
     // });
   }
+  
 }
 
 module.exports = Attendance;
