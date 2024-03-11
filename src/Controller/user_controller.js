@@ -5,13 +5,10 @@ const User_activity = require("../Models/User_activity.js");
 const Permission = require("../Models/Permission.js");
 const LookUp = require("../Models/LookUp.js");
 const { success, error } = require("../Response/API-Response.js");
-const promise = require("bcrypt/promises.js");
 const user_details = require("../Models/User_details.js");
 const Excel = require("exceljs");
-const path = require("path");
-const tmpDir = "/src/exportData";
 const firebase_admin = require("../Config/FireBase_Configuration.js");
-
+const { Push_Notification } = require("../Utils.js/fireBase.js");
 
 exports.Login_User = (req, res) => {
   console.log("Login");
@@ -174,6 +171,20 @@ exports.Login_UserV2 = (req, res) => {
                 user[0].device_token = req.body.device_token;
                 user[0].platform = req.body.platform;
                 user[0].is_super_user = !!user[0].is_super_user;
+
+                const registrationToken = [
+                  user[0].device_token,
+                  "fEJ4OOsSTCOSLmKbZp5-AC:APA91bHUyWBRiMlE-1hDOjHGn2u1EtrK6zEXYmUC1xPc1_BqRUEzGKU_ch7wRz1Xjqa4-srtNjIY0tDM7pSPN-ANICd8qEvjW3_lase_m6HD40eeVVAOP7VDyxB4oBSILm_ZDhWXTlQQ"
+                ];
+
+                const notificationPayload = {
+                  image:
+                    "https://banner2.cleanpng.com/20201008/rtv/transparent-google-suite-icon-google-icon-5f7f985ccd60e3.5687494416021975968412.jpg",
+
+                  title: "Welcome Back !",
+                  body: "You have successfully logged in.",
+                };
+                Push_Notification(notificationPayload, registrationToken);
 
                 return res.status(200).json(
                   success("Login Successfull", {
@@ -651,7 +662,9 @@ exports.Delete_User = (req, res) => {
 
   if (!!req.body.user_name == false || !!req.body.password == false) {
     return res.status(400).json(error("user_name/password not provided", {}));
-  } else {
+  } 
+  
+  else {
     var params = {
       UserName: req.body.user_name,
       Password: req.body.password,
@@ -839,120 +852,4 @@ exports.Export_User_Data = async (req, res) => {
     console.error("Error exporting user data:", error);
     res.status(500).send("Internal Server Error");
   }
-};
-
-exports.Export_User_Data2 = async (req, res) => {
-  try {
-    var param = {
-      user_id: req.body.user_id,
-      team_id: req.body.team_id,
-      shift_id: req.body.shift_id,
-      start_day: req.body.start_day,
-      end_day: req.body.end_day,
-      data_type: req.body.data_type,
-      status: req.body.status,
-    };
-    // Retrieve user data from the User module
-    User.Get_Users_Data_Excel(param, async (err, data) => {
-      if (!Array.isArray(data)) {
-        data = [data];
-      }
-
-      if (err) {
-        console.error("Error exporting user data:", err);
-        res.status(500).send("Internal Server Error");
-        return;
-      }
-
-      // Create a new workbook
-      const workbook = new Excel.Workbook();
-      const worksheet = workbook.addWorksheet("Data");
-
-      // Define column headers
-      worksheet.columns = [
-        { header: "id", key: "id" },
-        { header: "start_time", key: "start_time" },
-        { header: "end_time", key: "end_time" },
-        { header: "is_active", key: "is_active" },
-        { header: "user_id", key: "user_id" },
-        { header: "status", key: "status" },
-        // { header: "leaves", key: "leaves" },
-        { header: "comments", key: "comments" },
-        { header: "shift_id", key: "shift_id" },
-        { header: "team_id", key: "team_id" },
-        { header: "created_by", key: "created_by" },
-        { header: "deleted_by", key: "deleted_by" },
-        { header: "approved_by", key: "approved_by" },
-        { header: "created_time", key: "created_time" },
-        { header: "deleted_time", key: "deleted_time" },
-        { header: "approved_time", key: "approved_time" },
-        { header: "modify_time", key: "modify_time" },
-        { header: "deny_by", key: "deny_by" },
-        { header: "deny_time", key: "deny_time" },
-        { header: "shift_name", key: "shift_name" },
-        { header: "team_name", key: "team_name" },
-        { header: "user_name", key: "user_name" },
-        { header: "full_name", key: "full_name" },
-        { header: "created_name", key: "created_name" },
-        { header: "deleted_name", key: "deleted_name" },
-        { header: "approved_name", key: "approved_name" },
-        { header: "modify_name", key: "modify_name" },
-        { header: "modify_by", key: "modify_by" },
-
-        // worksheet.addRow([{}]);
-      ];
-
-      // Add data from the User module to the worksheet
-      data.forEach((row) => {
-        worksheet.addRow(row);
-      });
-
-      // Generate a unique file name
-      const fileName = `data_${Date.now()}.xlsx`;
-      const filePath = path.join(tmpDir, fileName);
-
-      // Save the workbook to a temporary file
-      await workbook.xlsx.writeFile(filePath);
-
-      // Send the URL of the temporary file
-      const fileUrl = `/src/exportData/${fileName}`;
-      res.status(200).json({ url: fileUrl });
-    });
-  } catch (error) {
-    console.error("Error exporting user data:", error);
-    res.status(500).send("Internal Server Error");
-  }
-};
-
-exports.Push_Notification = async (req, res) => {
-  
-
-  // Access messaging service
-const messaging = firebase_admin.messaging();
-
-  async function sendNotification(registrationToken, notificationPayload) {
-    try {
-      const message = {
-        notification: notificationPayload, // Notification message content
-        token: registrationToken,
-      };
-
-      const response = await messaging.send(message);
-      console.log("Notification sent successfully:", response);
-      return res.status(200).json(("massege sent!!",message))
-    } catch (error) {
-      console.error("Error sending notification:", error);
-    }
-  }
-
-  // Example usage (replace with your actual logic)
-  const registrationToken =
-    "fEJ4OOsSTCOSLmKbZp5-AC:APA91bHUyWBRiMlE-1hDOjHGn2u1EtrK6zEXYmUC1xPc1_BqRUEzGKU_ch7wRz1Xjqa4-srtNjIY0tDM7pSPN-ANICd8qEvjW3_lase_m6HD40eeVVAOP7VDyxB4oBSILm_ZDhWXTlQQ";
-  const notificationPayload = {
-    image: 'https://banner2.cleanpng.com/20201008/rtv/transparent-google-suite-icon-google-icon-5f7f985ccd60e3.5687494416021975968412.jpg',
-    title: "Breaking News!",
-    body: "Important update available.",
-  };
-
-  sendNotification(registrationToken, notificationPayload);
 };

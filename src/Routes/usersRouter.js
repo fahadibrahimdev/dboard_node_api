@@ -35,6 +35,4 @@ router.post(
   user_controller.Get_Users_By_Teams_Id
 );
 router.post("/export_user_data", user_controller.Export_User_Data);
-router.post("/export_user_data2", user_controller.Export_User_Data2);
-router.post("/push_notification", user_controller.Push_Notification);
 module.exports = router;

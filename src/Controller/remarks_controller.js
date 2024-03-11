@@ -1,3 +1,4 @@
+const { now } = require("moment");
 const Remarks = require("../Models/Remarks.js");
 const { success, error } = require("../Response/API-Response.js");
 const { promise } = require("bcrypt/promises.js");
@@ -67,6 +68,43 @@ exports.Filter_Remarks = (req, res) => {
 
   // Function call
   promiseExecution();
+};
 
-  
+exports.Create_Remarks = (req, res) => {
+  if (
+    !!req.body.comments == false ||
+    !!req.body.attendance_id == false ||
+    !!req.userData.UserID == false
+  ) {
+    return res
+      .status(400)
+      .json(error("attendance_id/comments not provided", {}));
+  } else {
+    console.log("Remarks");
+    const currentDate = new Date();
+    const createdTime = currentDate.toISOString(); 
+    var params = {
+      
+      comments: req.body.comments,
+      user_id: req.userData.UserID,
+      attendance_id: req.body.attendance_id,
+      created_time:createdTime,
+    };
+
+    Remarks.Create_Remarks(
+      params,
+
+      (err, data) => {
+        if (err) {
+          return res
+            .status(400)
+            .json(error("Error while creating remarks", {}));
+        } else {
+          return res
+            .status(200)
+            .json(error("Remarks Created  successfull", {data}));
+        }
+      }
+    );
+  }
 };

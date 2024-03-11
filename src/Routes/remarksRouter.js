@@ -15,7 +15,7 @@ const upload = multer({ storage: storage });
 const remarks_controller = require("../Controller/remarks_controller");
 const check_auth = require("../Middleware/check_auth");
 
-
+router.post("/create_remakrs",check_auth,remarks_controller.Create_Remarks)
 
 router.post(
   "/get_remarks_by_pagination",

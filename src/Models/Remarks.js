@@ -167,6 +167,30 @@ class Remarks {
       result(e, null);
     }
   }
+
+  static async Create_Remarks(body, result) {
+    try {
+      console.log("Create_Remarks");
+
+      var myQuery =
+        "INSERT INTO `remarks` (`id`,`user_id`,`attendance_id`,`comments`,`created_time`) " +
+        "VALUE ( '" +"NULL', '" +
+        body.user_id +
+        "','" +
+        body.attendance_id +
+        "','" +
+        body.comments +
+        "','" +
+        body.created_time +
+        "');";
+      const res = await Query.executeWithParams(myQuery);
+
+   
+      result(null, res);
+    } catch (e) {
+      result(e, null);
+    }
+  }
 }
 
 module.exports = Remarks;
