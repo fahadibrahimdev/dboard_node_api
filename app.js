@@ -7,9 +7,12 @@ const usersRouter = require("./src/Routes/usersRouter");
 const attendanceRouter = require("./src/Routes/attendanceRouter");
 const transactionRouter = require("./src/Routes/transactionRouter");
 const remarksRouter = require("./src/Routes/remarksRouter");
+const {scheduleCronJob} = require("./src/CronJobs/nodecron.js");
 
 app.use(morgan("dev"));
-
+const command = 'powershell -Command "& {./src/CronJobs/database_backup.sh}"';
+const schedule = '*/1 * * * *'; // Every 1 minute
+scheduleCronJob(command, schedule);
 // for parsing application/json
 app.use(
   bodyParser.json({

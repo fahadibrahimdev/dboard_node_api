@@ -98,7 +98,7 @@ exports.Create_Remarks = (req, res) => {
         if (err) {
           return res
             .status(400)
-            .json(error("Error while creating remarks", {}));
+            .json(error("Error while creating remarks. No atttendence foundfor this id ", {}));
         } else {
           return res
             .status(200)
