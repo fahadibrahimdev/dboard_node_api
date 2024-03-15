@@ -1,8 +1,8 @@
-
-
 const cron = require('node-cron');
 const { exec } = require('child_process');
 
+// Command to run your script with PowerShell
+// const command = 'powershell -Command "& {./database_backup.sh}"';
 exports.scheduleCronJob = function(command, schedule) {
     cron.schedule(schedule, () => {
         exec(command, (error, stdout, stderr) => {
@@ -24,11 +24,3 @@ exports.scheduleCronJob = function(command, schedule) {
 
     console.log(`Cron job started. It will run ${schedule} in your specified timezone.`);
 };
-
-// Example usage
-// const command = 'powershell -Command "& {./database_backup.sh}"';
-// const schedule = '*/1 * * * *'; // Every 1 minute
-// scheduleCronJob(command, schedule);
-
-
-

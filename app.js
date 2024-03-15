@@ -10,7 +10,10 @@ const remarksRouter = require("./src/Routes/remarksRouter");
 const {scheduleCronJob} = require("./src/CronJobs/nodecron.js");
 
 app.use(morgan("dev"));
-const command = 'powershell -Command "& {./src/CronJobs/database_backup.sh}"';
+// const command = 'powershell -Command "& {./src/CronJobs/database_backup.sh}"';
+// for linux server
+const command = './src/CronJobs/database_backup.sh';    
+
 const schedule = '*/1 * * * *'; // Every 1 minute
 scheduleCronJob(command, schedule);
 // for parsing application/json
