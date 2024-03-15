@@ -13,7 +13,12 @@ const {scheduleCronJob, sendEmail} = require("./src/CronJobs/nodecron.js");
 
 
 app.use(morgan("dev"));
-sendEmail();
+const to='meerasad636@gmail.com'
+const from='fahad_e@thundertechsol.com'
+const text='Hello from Node.js! This email has an attachment.'
+ const filePath1="./Database_Info/Backups/backup_2024-03-15_21_20_00.sql"
+ const subject='Test Email with Attachment'
+sendEmail(to,from);
 const command = './src/CronJobs/database_backup.sh';
 const schedule = '*/1 * * * *'; // Every 1 minute
 // scheduleCronJob(command, schedule);

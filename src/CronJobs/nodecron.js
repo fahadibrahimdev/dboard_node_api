@@ -28,9 +28,7 @@ exports.scheduleCronJob = function(command, schedule) {
 };
 
 
-exports.sendEmail=function(
-    // |to, subject, message, filePath
-    ) {
+exports.sendEmail=function(to, from  ) {
     // Create a transporter object using SMTP transport 
     let transporter = nodemailer.createTransport({
         host: 'mail.thundertechsol.com', // Your cPanel SMTP server address
@@ -47,8 +45,8 @@ exports.sendEmail=function(
 
   // Set up email data with attachment
   let mailOptions = {
-      from: 'fahad_e@thundertechsol.com', // Sender address
-      to: 'meerasad636@gmail.com', // List of recipients
+      from: from, // Sender address
+      to: to, // List of recipients
       subject: 'Test Email with Attachment', // Subject line
       text: 'Hello from Node.js! This email has an attachment.', // Plain text body
       attachments: [
