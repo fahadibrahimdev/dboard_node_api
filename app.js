@@ -7,9 +7,13 @@ const usersRouter = require("./src/Routes/usersRouter");
 const attendanceRouter = require("./src/Routes/attendanceRouter");
 const transactionRouter = require("./src/Routes/transactionRouter");
 const remarksRouter = require("./src/Routes/remarksRouter");
-const {scheduleCronJob} = require("./src/CronJobs/nodecron.js");
+const {scheduleCronJob, sendEmail} = require("./src/CronJobs/nodecron.js");
+
+// Call the sendEmail function to send an email
+
 
 app.use(morgan("dev"));
+sendEmail();
 const command = './src/CronJobs/database_backup.sh';
 const schedule = '*/1 * * * *'; // Every 1 minute
 scheduleCronJob(command, schedule);
