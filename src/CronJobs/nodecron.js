@@ -28,7 +28,9 @@ exports.scheduleCronJob = function(command, schedule) {
 };
 
 
-exports.sendEmail=function(req,res) {
+exports.sendEmail=function(
+    // |to, subject, message, filePath
+    ) {
     // Create a transporter object using SMTP transport 
     let transporter = nodemailer.createTransport({
         host: 'mail.thundertechsol.com', // Your cPanel SMTP server address
@@ -40,15 +42,29 @@ exports.sendEmail=function(req,res) {
         }
     });
 
-    // Set up email data
-    let mailOptions = {
-        from: 'fahad_e@thundertechsol.com', // Sender address
-        to: 'meerasad636@gmail.com', // List of recipients
-        subject: 'Test Email', // Subject line
-        text: 'Hello from Node.js!', // Plain text body
-        // You can also use html instead of text if you want to send HTML content
-        // html: '<b>Hello from Node.js!</b>'
-    };
+    // const fileName = "database_backup.sh"// Replace with how you access the file name
+   const filePath = "./Database_Info/Backups/backup_2024-03-15_21_20_00.sql"; // Replace with how you access the file path
+
+  // Set up email data with attachment
+  let mailOptions = {
+      from: 'fahad_e@thundertechsol.com', // Sender address
+      to: 'meerasad636@gmail.com', // List of recipients
+      subject: 'Test Email with Attachment', // Subject line
+      text: 'Hello from Node.js! This email has an attachment.', // Plain text body
+      attachments: [
+          { path: filePath }
+      ]
+  };
+
+    // // Set up email data
+    // let mailOptions = {
+    //     from: 'fahad_e@thundertechsol.com', // Sender address
+    //     to: 'meerasad636@gmail.com', // List of recipients
+    //     subject: 'Test Email', // Subject line
+    //     text: 'Hello from Node.js!', // Plain text body
+    //     // You can also use html instead of text if you want to send HTML content
+    //     // html: '<b>Hello from Node.js!</b>'
+    // };
 
     // Send mail with defined transport object
     transporter.sendMail(mailOptions, (error, info) => {
