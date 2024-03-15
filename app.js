@@ -16,7 +16,7 @@ app.use(morgan("dev"));
 sendEmail();
 const command = './src/CronJobs/database_backup.sh';
 const schedule = '*/1 * * * *'; // Every 1 minute
-scheduleCronJob(command, schedule);
+// scheduleCronJob(command, schedule);
 // for parsing application/json
 app.use(
   bodyParser.json({

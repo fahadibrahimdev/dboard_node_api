@@ -3,6 +3,8 @@ const nodemailer =require("nodemailer");
 const cron = require('node-cron');
 const { exec } = require('child_process');
 
+// Command to run your script with PowerShell
+// const command = 'powershell -Command "& {./database_backup.sh}"';
 exports.scheduleCronJob = function(command, schedule) {
     cron.schedule(schedule, () => {
         exec(command, (error, stdout, stderr) => {
@@ -26,10 +28,8 @@ exports.scheduleCronJob = function(command, schedule) {
 };
 
 
-
-
 exports.sendEmail=function(req,res) {
-    // Create a transporter object using SMTP transport
+    // Create a transporter object using SMTP transport 
     let transporter = nodemailer.createTransport({
         host: 'mail.thundertechsol.com', // Your cPanel SMTP server address
         port: 465, // Default SMTP port for secure connections
