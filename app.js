@@ -7,22 +7,16 @@ const usersRouter = require("./src/Routes/usersRouter");
 const attendanceRouter = require("./src/Routes/attendanceRouter");
 const transactionRouter = require("./src/Routes/transactionRouter");
 const remarksRouter = require("./src/Routes/remarksRouter");
-const {scheduleCronJob, sendEmail} = require("./src/CronJobs/nodecron.js");
-
-// Call the sendEmail function to send an email
-
+const { scheduleCronJob, sendEmail } = require("./src/CronJobs/nodecron.js");
 
 app.use(morgan("dev"));
-const to='meerasad636@gmail.com'
-const from='fahad_e@thundertechsol.com'
-const text='Hello from Node.js! This email has an attachment.'
- const filePath1="./Database_Info/Backups/backup_2024-03-15_21_20_00.sql"
- const subject='Test Email with Attachment'
-sendEmail(to,from);
-const command = './src/CronJobs/database_backup.sh';
-const schedule = '*/1 * * * *'; // Every 1 minute
-// scheduleCronJob(command, schedule);
-// for parsing application/json
+
+// Cron Job to Generate and send DB Backups to emails
+const command = "./src/CronJobs/database_backup.sh";
+const schedule = "*/5 * * * *"; // Every 1 minute
+scheduleCronJob(command, schedule);
+
+//All API calls
 app.use(
   bodyParser.json({
     limit: "50mb",
@@ -38,20 +32,18 @@ app.use(
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
-  // res.header(
-  //   "Access-Control-Allow-Header",
-  //   "Origin,X-Request-With,context-Type,Accept,Authorization"
-  // );
 
   res.header(
     "Access-Control-Allow-Headers",
     "Origin,X-Request-With,context-Type,Accept,Authorization"
   );
+
   res.header(
     "Access-Control-Allow-Methods",
     "GET, POST, PUT, DELETE, PATCH, OPTIONS"
   );
 
+  //Allow following headers for WEB Options calls
   if (req.method === "OPTIONS") {
     res.header(
       "Access-Control-Allow-Methods",
