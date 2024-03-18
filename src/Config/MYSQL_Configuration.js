@@ -1,10 +1,12 @@
-const ENV_ENUM = require('../Helpers/ENV_ENUM');
+const ENV_ENUM = require("../Helpers/ENV_ENUM");
 
-var myDBName = '';
-if(!!process.env.Environment ) {
-  if(process.env.Environment === "UAT") {
+var myDBName = "";
+if (!!process.env.Environment) {
+  if (process.env.Environment === "QA") {
+    myDBName = ENV_ENUM.QA.dbName;
+  } else if (process.env.Environment === "UAT") {
     myDBName = ENV_ENUM.UAT.dbName;
-  } else if(process.env.Environment === "PROD") {
+  } else if (process.env.Environment === "PROD") {
     myDBName = ENV_ENUM.PROD.dbName;
   }
 } else {

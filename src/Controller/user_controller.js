@@ -7,8 +7,8 @@ const LookUp = require("../Models/LookUp.js");
 const { success, error } = require("../Response/API-Response.js");
 const user_details = require("../Models/User_details.js");
 const Excel = require("exceljs");
-const firebase_admin = require("../Config/FireBase_Configuration.js");
-const { Push_Notification } = require("../Utils.js/fireBase.js");
+
+// const { Push_Notification } = require("../Utils.js/fireBase.js");
 
 exports.Login_User = (req, res) => {
   console.log("Login");
@@ -174,7 +174,7 @@ exports.Login_UserV2 = (req, res) => {
 
                 const registrationToken = [
                   user[0].device_token,
-                  "fEJ4OOsSTCOSLmKbZp5-AC:APA91bHUyWBRiMlE-1hDOjHGn2u1EtrK6zEXYmUC1xPc1_BqRUEzGKU_ch7wRz1Xjqa4-srtNjIY0tDM7pSPN-ANICd8qEvjW3_lase_m6HD40eeVVAOP7VDyxB4oBSILm_ZDhWXTlQQ"
+                  "fEJ4OOsSTCOSLmKbZp5-AC:APA91bHUyWBRiMlE-1hDOjHGn2u1EtrK6zEXYmUC1xPc1_BqRUEzGKU_ch7wRz1Xjqa4-srtNjIY0tDM7pSPN-ANICd8qEvjW3_lase_m6HD40eeVVAOP7VDyxB4oBSILm_ZDhWXTlQQ",
                 ];
 
                 const notificationPayload = {
@@ -184,7 +184,7 @@ exports.Login_UserV2 = (req, res) => {
                   title: "Welcome Back !",
                   body: "You have successfully logged in.",
                 };
-                Push_Notification(notificationPayload, registrationToken);
+                // Push_Notification(notificationPayload, registrationToken);
 
                 return res.status(200).json(
                   success("Login Successfull", {
@@ -662,9 +662,7 @@ exports.Delete_User = (req, res) => {
 
   if (!!req.body.user_name == false || !!req.body.password == false) {
     return res.status(400).json(error("user_name/password not provided", {}));
-  } 
-  
-  else {
+  } else {
     var params = {
       UserName: req.body.user_name,
       Password: req.body.password,

@@ -21,6 +21,35 @@ exports.sendEmail = function (params) {
     },
   });
 
+  // Set up email data with attachment
+  let mailOptions = {
+    from: params.from, // Sender address
+    to: params.to, // List of recipients
+    subject: params.subject, // Subject line
+    text: params.text, // Plain text body
+  };
+
+  // Send mail with defined transport object
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      return console.log(error);
+    }
+    console.log("Message sent: %s", info.messageId);
+  });
+};
+
+exports.sendEmailWithAttachment = function (params) {
+  // Create a transporter object using SMTP transport
+  let transporter = nodemailer.createTransport({
+    host: "mail.thundertechsol.com", // Your cPanel SMTP server address
+    port: 465, // Default SMTP port for secure connections
+    secure: true, // Use SSL/TLS
+    auth: {
+      user: "fahad_e@thundertechsol.com", // Your Gmail address
+      pass: "VERdd123$fahad", // Your Gmail password
+    },
+  });
+
   // const fileName = "database_backup.sh"// Replace with how you access the file name
   const filePath = params.filePath; // Replace with how you access the file path
 
@@ -28,8 +57,8 @@ exports.sendEmail = function (params) {
   let mailOptions = {
     from: params.from, // Sender address
     to: params.to, // List of recipients
-    subject: "Test Email with Attachment", // Subject line
-    text: "Hello from Node.js! This email has an attachment.", // Plain text body
+    subject: params.subject, // Subject line
+    text: params.text, // Plain text body
     attachments: [{ path: filePath }],
   };
 

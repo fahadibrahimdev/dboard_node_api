@@ -1,6 +1,6 @@
 #!/bin/bash
 
-Database details
+#Database details
 DATABASE_NAME="thundertechsol_mab_uat"
 DATABASE_USERNAME="thundertechsol_mab"
 DATABASE_PASSWORD="MABuser123$"
@@ -8,7 +8,11 @@ DATABASE_HOST="23.106.120.176"
 DATABASE_PORT="3306"
 
 # Backup file details (customizable)
-BACKUP_DIRECTORY="/Users/devdock/Desktop/MyDesktop/NodeJS/dboard_node_api/Database_Info/Backups"
+#PROD Directory URL
+
+BACKUP_DIRECTORY="Database_Info/Backups"
+# BACKUP_DIRECTORY="/Users/devdock/Desktop/MyDesktop/NodeJS/dboard_node_api/Database_Info/Backups"
+
 BACKUP_FILENAME="backup_$(date -u +'%Y-%m-%d_%H').sql"
 
 # Error handling and logging

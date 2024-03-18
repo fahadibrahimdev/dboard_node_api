@@ -1,12 +1,6 @@
 {
   "env": {
-   "JWT_KEY":"secret",
-   "Environment": "UAT",
-   "DATABASE_NAME":"thundertechsol_mab_uat",
-"DATABASE_USERNAME":"thundertechsol_mab",
-"DATABASE_PASSWORD":"MABuser123$",
-"DATABASE_HOST":"23.106.120.176",
-"DATABASE_PORT":"3306"
-
+    "JWT_KEY": "secret",
+    "Environment": "QA"
   }
 }
