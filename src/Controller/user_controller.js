@@ -873,7 +873,7 @@ exports.Export_User_Data = async (req, res) => {
       // Define column headers
       const desiredColumns = [
         { header: "shift_name", key: "shift_name" },
-        { header: "teams_name", key: "teams_name" },
+        { header: "team_name", key: "team_name" },
         { header: "user_name", key: "user_name" },
         { header: "full_name", key: "full_name" },
         { header: "shift_id", key: "shift_id" },
