@@ -7,8 +7,7 @@ const LookUp = require("../Models/LookUp.js");
 const { success, error } = require("../Response/API-Response.js");
 const user_details = require("../Models/User_details.js");
 const Excel = require("exceljs");
-const fs = require('fs');
-const path = require('path');
+
 // const { Push_Notification } = require("../Utils.js/fireBase.js");
 
 exports.Login_User = (req, res) => {
@@ -166,25 +165,14 @@ exports.Login_UserV2 = (req, res) => {
             UserID: user[0].id,
           };
 
-          User_activity.UpdateTokenInfoV2(params2, (err, _data) => {
+          User_activity.UpdateTokenInfoV2(params2, (_data) => {
             User_activity.insert_user_activity(params2, (err, _data) => {
               if (!err) {
                 user[0].device_token = req.body.device_token;
                 user[0].platform = req.body.platform;
                 user[0].is_super_user = !!user[0].is_super_user;
 
-                const registrationToken = [
-                  user[0].device_token,
-                  "fEJ4OOsSTCOSLmKbZp5-AC:APA91bHUyWBRiMlE-1hDOjHGn2u1EtrK6zEXYmUC1xPc1_BqRUEzGKU_ch7wRz1Xjqa4-srtNjIY0tDM7pSPN-ANICd8qEvjW3_lase_m6HD40eeVVAOP7VDyxB4oBSILm_ZDhWXTlQQ",
-                ];
 
-                const notificationPayload = {
-                  image:
-                    "https://banner2.cleanpng.com/20201008/rtv/transparent-google-suite-icon-google-icon-5f7f985ccd60e3.5687494416021975968412.jpg",
-
-                  title: "Welcome Back !",
-                  body: "You have successfully logged in.",
-                };
                 // Push_Notification(notificationPayload, registrationToken);
 
                 return res.status(200).json(
@@ -264,7 +252,7 @@ exports.Signup_User = (req, res) => {
                   expiresIn: "40d",
                 }
               );
-              User.IntersionInPermission(data.insertId, (err, data2) => {
+              User.IntersionInPermission(data.insertId, (err) => {
                 if (err) {
                   console.log("Err:", err);
                   res.status(400).json(error("NOt a super user"));
@@ -327,7 +315,7 @@ exports.Heart_Beat = (req, res) => {
         var params = {
           UserID: req.userData.UserID,
         };
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
           Permission.GetAllPermission(params, (err, PermissionData) => {
             if (err) {
               myPermissions = [];
@@ -340,7 +328,7 @@ exports.Heart_Beat = (req, res) => {
       };
 
       let secondPromise = () => {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
           News.GetAllNews((err, Newsdata) => {
             if (!err) {
               myNews = Newsdata;
@@ -353,7 +341,7 @@ exports.Heart_Beat = (req, res) => {
       };
 
       let thirdPromise = () => {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
           LookUp.GetAllGame((err, GamesData) => {
             if (!err) {
               myGame = GamesData;
@@ -366,7 +354,7 @@ exports.Heart_Beat = (req, res) => {
       };
 
       let forthPromise = () => {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
           LookUp.GetAllTeams((err, TeamsData) => {
             if (!err) {
               myTeams = TeamsData;
@@ -379,7 +367,7 @@ exports.Heart_Beat = (req, res) => {
       };
 
       let fifthPromise = () => {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
           LookUp.GetAllTransactionTypes((err, TransactionTypesData) => {
             if (!err) {
               myTransactionTypes = TransactionTypesData;
@@ -392,7 +380,7 @@ exports.Heart_Beat = (req, res) => {
       };
 
       let sixthPromise = () => {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
           LookUp.GetAllShift((err, ShiftData) => {
             if (!err) {
               myShift = ShiftData;
@@ -408,7 +396,7 @@ exports.Heart_Beat = (req, res) => {
         var params = {
           UserID: req.userData.UserID,
         };
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
           LookUp.GetAllUserTeams(params, (err, userTeamsData) => {
             if (!err) {
               userTeams = userTeamsData;
@@ -424,7 +412,7 @@ exports.Heart_Beat = (req, res) => {
         var params = {
           UserID: req.userData.UserID,
         };
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
           LookUp.GetAllUserShift(params, (err, userShiftData) => {
             if (!err) {
               userShift = userShiftData;
@@ -440,7 +428,7 @@ exports.Heart_Beat = (req, res) => {
         var params = {
           UserID: req.userData.UserID,
         };
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
           LookUp.GetAllUserGame(params, (err, userGameData) => {
             if (!err) {
               userGame = userGameData;
@@ -453,7 +441,7 @@ exports.Heart_Beat = (req, res) => {
       };
 
       let tenthPromise = () => {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
           LookUp.GetAllStatus((err, status) => {
             if (!err) {
               Status = status;
@@ -468,7 +456,7 @@ exports.Heart_Beat = (req, res) => {
         var params = {
           UserID: req.userData.UserID,
         };
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
           User.UserData(params, (err, userdata) => {
             if (!err) {
               userData = userdata;
@@ -483,7 +471,7 @@ exports.Heart_Beat = (req, res) => {
         var params = {
           UserID: req.userData.UserID,
         };
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
           user_details.Get_All_User_Details(params, (err, userdetailsdata) => {
             if (!err) {
               userdetails = userdetailsdata[0].flags !== 0;
@@ -644,7 +632,7 @@ exports.Logout = (req, res) => {
       Deviceinfo: !!req.body.DeviceInfo ? req.body.DeviceInfo : "",
     };
 
-    User.Logout(params, (err, _data) => {
+    User.Logout(params, (_data) => {
       // if (err || _data.changedRows < 1) {
       //   return res.status(400).json(error("Logout unsuccessful!!"));
       // } else {
@@ -685,7 +673,7 @@ exports.Delete_User = (req, res) => {
           User.DeletedUser(
             params,
 
-            (err, data) => {
+            (err) => {
               if (err) {
                 return res
                   .status(400)
@@ -724,7 +712,7 @@ exports.Update_Flags = (req, res) => {
       UserID: req.userData.UserID,
     };
 
-    user_details.Update_User_Flags_Details(params, (err, data) => {
+    user_details.Update_User_Flags_Details(params, (err) => {
       if (!err) {
         return res.status(200).json(success("User Veiw All Notification  :"));
       } else {
@@ -761,16 +749,99 @@ exports.Get_Users_By_Teams_Id = (req, res) => {
   }
 };
 
-
-
-
-
-
-
 const generateFileUrl = (req, fileName) => {
-  const serverUrl = req.protocol + '://' + req.get('host');
+  const serverUrl = req.protocol + "://" + req.get("host");
   return `${serverUrl}/exports/${fileName}`;
 };
+
+// exports.Export_User_Data = async (req, res) => {
+//   try {
+//     var param = {
+//       user_id: req.body.user_id,
+//       team_id: req.body.team_id,
+//       shift_id: req.body.shift_id,
+//       start_day: req.body.start_day,
+//       end_day: req.body.end_day,
+//       data_type: req.body.data_type,
+//       status: req.body.status,
+//     };
+
+//     User.Get_Users_Data_Excel(param, (err, data) => {
+
+//       if (!Array.isArray(data)) {
+//         data = [data];
+//       }
+
+//       if (err) {
+//         console.error("Error exporting user data:", err);
+//         res.status(500).send("Internal Server Error");
+//         return;
+//       }
+
+//       const workbook = new Excel.Workbook();
+//       const worksheet = workbook.addWorksheet("Data");
+//       // Define column headers
+//       const desiredColumns = [
+//         { header: "id", key: "id" },
+//         { header: "start_time", key: "start_time" },
+//         { header: "end_time", key: "end_time" },
+//         { header: "is_active", key: "is_active" },
+//         { header: "user_id", key: "user_id" },
+//         { header: "status", key: "status" },
+//         // { header: "leaves", key: "leaves" },  // Include if required
+//         { header: "comments", key: "comments" },
+//         { header: "shift_id", key: "shift_id" },
+//         { header: "team_id", key: "team_id" },
+//         { header: "created_by", key: "created_by" },
+//         { header: "deleted_by", key: "deleted_by" }, // Include if required
+//         { header: "approved_by", key: "approved_by" }, // Include if required
+//         { header: "created_time", key: "created_time" },
+//         { header: "deleted_time", key: "deleted_time" }, // Include if required
+//         { header: "approved_time", key: "approved_time" }, // Include if required
+//         { header: "modify_time", key: "modify_time" },
+//         { header: "deny_by", key: "deny_by" }, // Include if required
+//         { header: "deny_time", key: "deny_time" }, // Include if required
+//         { header: "shift_name", key: "shift_name" },
+//         { header: "team_name", key: "team_name" },
+//         { header: "user_name", key: "user_name" },
+//         { header: "full_name", key: "full_name" },
+//         { header: "created_name", key: "created_name" }, // Include if required
+//         { header: "deleted_name", key: "deleted_name" }, // Include if required
+//         { header: "approved_name", key: "approved_name" }, // Include if required
+//         { header: "modify_name", key: "modify_name" }, // Include if required
+//         { header: "modify_by", key: "modify_by" }, // Include if required
+//       ];
+
+//       worksheet.columns = desiredColumns;
+
+//       data.forEach((row) => {
+//         console.log("user data row: ", row);
+//         worksheet.addRow(row);
+//       });
+
+//       console.log("Fahad data: ", JSON.stringify(data));
+//       console.log("Fahad worksheet: ", worksheet);
+
+//       const fileName = `data_${Date.now()}.xlsx`;
+//       const fileUrl = generateFileUrl(req, fileName);
+
+//       res.setHeader("Content-Disposition", `attachment; filename="${fileName}"`);
+
+//       workbook.xlsx.writeFile(fileName)
+//         .then(() => {
+//           console.log("File saved successfully.");
+//           res.status(200).json({ fileUrl });
+//         })
+//         .catch((writeErr) => {
+//           console.error("Error saving Excel file:", writeErr);
+//           res.status(500).send("Internal Server Error");
+//         });
+//     });
+//   } catch (error) {
+//     console.error("Error exporting user data:", error);
+//     res.status(500).send("Internal Server Error");
+//   }
+// };
 
 exports.Export_User_Data = async (req, res) => {
   try {
@@ -785,68 +856,79 @@ exports.Export_User_Data = async (req, res) => {
     };
 
     User.Get_Users_Data_Excel(param, (err, data) => {
-     
-      if (!Array.isArray(data)) {
-        data = [data];
-      }
-
       if (err) {
         console.error("Error exporting user data:", err);
         res.status(500).send("Internal Server Error");
         return;
       }
 
+      if (!Array.isArray(data)) {
+        data = [data];
+      }
+      console.log("Data:", data);
+
       const workbook = new Excel.Workbook();
       const worksheet = workbook.addWorksheet("Data");
+
       // Define column headers
       const desiredColumns = [
-        { header: "id", key: "id" },
-        { header: "start_time", key: "start_time" },
-        { header: "end_time", key: "end_time" },
-        { header: "is_active", key: "is_active" },
-        { header: "user_id", key: "user_id" },
-        { header: "status", key: "status" },
-        // { header: "leaves", key: "leaves" },  // Include if required
-        { header: "comments", key: "comments" },
-        { header: "shift_id", key: "shift_id" },
-        { header: "team_id", key: "team_id" },
-        { header: "created_by", key: "created_by" },
-        { header: "deleted_by", key: "deleted_by" }, // Include if required
-        { header: "approved_by", key: "approved_by" }, // Include if required
-        { header: "created_time", key: "created_time" },
-        { header: "deleted_time", key: "deleted_time" }, // Include if required
-        { header: "approved_time", key: "approved_time" }, // Include if required
-        { header: "modify_time", key: "modify_time" },
-        { header: "deny_by", key: "deny_by" }, // Include if required
-        { header: "deny_time", key: "deny_time" }, // Include if required
         { header: "shift_name", key: "shift_name" },
-        { header: "team_name", key: "team_name" },
+        { header: "teams_name", key: "teams_name" },
         { header: "user_name", key: "user_name" },
         { header: "full_name", key: "full_name" },
-        { header: "created_name", key: "created_name" }, // Include if required
-        { header: "deleted_name", key: "deleted_name" }, // Include if required
-        { header: "approved_name", key: "approved_name" }, // Include if required
-        { header: "modify_name", key: "modify_name" }, // Include if required
-        { header: "modify_by", key: "modify_by" }, // Include if required
+        { header: "shift_id", key: "shift_id" },
+        { header: "team_id", key: "team_id" },
+        { header: "user_id", key: "user_id" },
+        { header: "id", key: "id" },
+        { header: "team_id", key: "team_id" },
+        { header: "start_time", key: "start_time" },
+        { header: "end_time", key: "end_time" },
+        { header: "status", key: "status" },
+        { header: "leaves", key: "leaves" },
+        { header: "comments", key: "comments" },
+        { header: "created_by", key: "created_by" },
+        { header: "created_name", key: "created_name" },
+        { header: "deleted_by", key: "deleted_by" },
+        { header: "deleted_name", key: "deleted_name" },
+        { header: "approved_by", key: "approved_by" },
+        { header: "approved_name", key: "approved_name" },
+        { header: "modify_by", key: "modify_by" },
+        { header: "modify_name", key: "modify_name" },
+        { header: "created_time", key: "created_time" },
+        { header: "deleted_time", key: "deleted_time" },
+        { header: "approved_time", key: "approved_time" },
+        { header: "modify_time", key: "modify_time" },
       ];
 
       worksheet.columns = desiredColumns;
 
       data.forEach((row) => {
-        console.log("user data row: ", row);
-        worksheet.addRow(row);
-      });
+        // Extract the 'attendances' array
+        const attendances = row.attendances;
 
-      console.log("Fahad data: ", JSON.stringify(data));
-      console.log("Fahad worksheet: ", worksheet);
+        // Loop over each 'RowDataPacket' in the 'attendances' array
+        attendances.forEach((attendance) => {
+          const rowData = desiredColumns.map((col) => {
+            if (attendance.hasOwnProperty(col.key)) {
+              return attendance[col.key];
+            } else {
+              console.error(
+                `Missing property '${col.key}' in row:`,
+                attendance
+              );
+              return null; // or some default value
+            }
+          });
+
+          worksheet.addRow(rowData);
+        });
+      });
 
       const fileName = `data_${Date.now()}.xlsx`;
       const fileUrl = generateFileUrl(req, fileName);
-    
 
-      res.setHeader("Content-Disposition", `attachment; filename="${fileName}"`);
-
-      workbook.xlsx.writeFile(fileName)
+      workbook.xlsx
+        .writeFile(fileName)
         .then(() => {
           console.log("File saved successfully.");
           res.status(200).json({ fileUrl });
@@ -861,6 +943,3 @@ exports.Export_User_Data = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
-
-
-
