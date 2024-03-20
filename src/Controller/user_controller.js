@@ -7,7 +7,8 @@ const LookUp = require("../Models/LookUp.js");
 const { success, error } = require("../Response/API-Response.js");
 const user_details = require("../Models/User_details.js");
 const Excel = require("exceljs");
-
+const path = require("path");
+const fs = require("fs");
 // const { Push_Notification } = require("../Utils.js/fireBase.js");
 
 exports.Login_User = (req, res) => {
@@ -171,7 +172,6 @@ exports.Login_UserV2 = (req, res) => {
                 user[0].device_token = req.body.device_token;
                 user[0].platform = req.body.platform;
                 user[0].is_super_user = !!user[0].is_super_user;
-
 
                 // Push_Notification(notificationPayload, registrationToken);
 
@@ -754,95 +754,6 @@ const generateFileUrl = (req, fileName) => {
   return `${serverUrl}/exports/${fileName}`;
 };
 
-// exports.Export_User_Data = async (req, res) => {
-//   try {
-//     var param = {
-//       user_id: req.body.user_id,
-//       team_id: req.body.team_id,
-//       shift_id: req.body.shift_id,
-//       start_day: req.body.start_day,
-//       end_day: req.body.end_day,
-//       data_type: req.body.data_type,
-//       status: req.body.status,
-//     };
-
-//     User.Get_Users_Data_Excel(param, (err, data) => {
-
-//       if (!Array.isArray(data)) {
-//         data = [data];
-//       }
-
-//       if (err) {
-//         console.error("Error exporting user data:", err);
-//         res.status(500).send("Internal Server Error");
-//         return;
-//       }
-
-//       const workbook = new Excel.Workbook();
-//       const worksheet = workbook.addWorksheet("Data");
-//       // Define column headers
-//       const desiredColumns = [
-//         { header: "id", key: "id" },
-//         { header: "start_time", key: "start_time" },
-//         { header: "end_time", key: "end_time" },
-//         { header: "is_active", key: "is_active" },
-//         { header: "user_id", key: "user_id" },
-//         { header: "status", key: "status" },
-//         // { header: "leaves", key: "leaves" },  // Include if required
-//         { header: "comments", key: "comments" },
-//         { header: "shift_id", key: "shift_id" },
-//         { header: "team_id", key: "team_id" },
-//         { header: "created_by", key: "created_by" },
-//         { header: "deleted_by", key: "deleted_by" }, // Include if required
-//         { header: "approved_by", key: "approved_by" }, // Include if required
-//         { header: "created_time", key: "created_time" },
-//         { header: "deleted_time", key: "deleted_time" }, // Include if required
-//         { header: "approved_time", key: "approved_time" }, // Include if required
-//         { header: "modify_time", key: "modify_time" },
-//         { header: "deny_by", key: "deny_by" }, // Include if required
-//         { header: "deny_time", key: "deny_time" }, // Include if required
-//         { header: "shift_name", key: "shift_name" },
-//         { header: "team_name", key: "team_name" },
-//         { header: "user_name", key: "user_name" },
-//         { header: "full_name", key: "full_name" },
-//         { header: "created_name", key: "created_name" }, // Include if required
-//         { header: "deleted_name", key: "deleted_name" }, // Include if required
-//         { header: "approved_name", key: "approved_name" }, // Include if required
-//         { header: "modify_name", key: "modify_name" }, // Include if required
-//         { header: "modify_by", key: "modify_by" }, // Include if required
-//       ];
-
-//       worksheet.columns = desiredColumns;
-
-//       data.forEach((row) => {
-//         console.log("user data row: ", row);
-//         worksheet.addRow(row);
-//       });
-
-//       console.log("Fahad data: ", JSON.stringify(data));
-//       console.log("Fahad worksheet: ", worksheet);
-
-//       const fileName = `data_${Date.now()}.xlsx`;
-//       const fileUrl = generateFileUrl(req, fileName);
-
-//       res.setHeader("Content-Disposition", `attachment; filename="${fileName}"`);
-
-//       workbook.xlsx.writeFile(fileName)
-//         .then(() => {
-//           console.log("File saved successfully.");
-//           res.status(200).json({ fileUrl });
-//         })
-//         .catch((writeErr) => {
-//           console.error("Error saving Excel file:", writeErr);
-//           res.status(500).send("Internal Server Error");
-//         });
-//     });
-//   } catch (error) {
-//     console.error("Error exporting user data:", error);
-//     res.status(500).send("Internal Server Error");
-//   }
-// };
-
 exports.Export_User_Data = async (req, res) => {
   try {
     var param = {
@@ -873,7 +784,7 @@ exports.Export_User_Data = async (req, res) => {
       // Define column headers
       const desiredColumns = [
         { header: "shift_name", key: "shift_name" },
-        { header: "team_name", key: "team_name" },
+        { header: "teams_name", key: "teams_name" },
         { header: "user_name", key: "user_name" },
         { header: "full_name", key: "full_name" },
         { header: "shift_id", key: "shift_id" },
@@ -924,13 +835,20 @@ exports.Export_User_Data = async (req, res) => {
         });
       });
 
+    
+
       const fileName = `data_${Date.now()}.xlsx`;
-      const fileUrl = generateFileUrl(req, fileName);
+      const filePath = path.join(
+        __dirname,
+        "../exports",
+        fileName
+      );
 
       workbook.xlsx
-        .writeFile(fileName)
+        .writeFile(filePath)
         .then(() => {
           console.log("File saved successfully.");
+          const fileUrl = generateFileUrl(req, fileName);
           res.status(200).json({ fileUrl });
         })
         .catch((writeErr) => {
