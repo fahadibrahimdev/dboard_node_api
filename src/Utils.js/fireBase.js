@@ -32,7 +32,7 @@ exports.Push_Notification = async (notificationPayload,registrationToken) => {
     //   body: "Important update available.",
     // };
   
-    // sendNotification(registrationToken, notificationPayload);
+    sendNotification(registrationToken, notificationPayload);
     for (const token of registrationToken) {
         await sendNotification(token, notificationPayload);
         console.log("Notification sent to:", token);

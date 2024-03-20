@@ -9,7 +9,7 @@ const user_details = require("../Models/User_details.js");
 const Excel = require("exceljs");
 const path = require("path");
 const fs = require("fs");
-// const { Push_Notification } = require("../Utils.js/fireBase.js");
+const { Push_Notification } = require("../Utils.js/fireBase.js");
 
 exports.Login_User = (req, res) => {
   console.log("Login");
@@ -173,7 +173,16 @@ exports.Login_UserV2 = (req, res) => {
                 user[0].platform = req.body.platform;
                 user[0].is_super_user = !!user[0].is_super_user;
 
-                // Push_Notification(notificationPayload, registrationToken);
+                const registrationToken = user[0].device_token;
+                // "ezNiZnyiSYKJenINFQAOvT:APA91bFKQfob1USeI8wWkK9hauC331-yFGc5i9wdCwQyasUYJgbviaSEaybalXrZ_UEQp6Ev7ADqYldVVXriSm6orc6rfIrnPkX2HYhR7dvY9W_YPnJsHIWleolAgQKYxMkXzpdIMcQZ";
+                const notificationPayload = {
+                  image:
+                    "https://banner2.cleanpng.com/20201008/rtv/transparent-google-suite-icon-google-icon-5f7f985ccd60e3.5687494416021975968412.jpg",
+                  title: "Breaking News!",
+                  body: "Important update available.",
+                };
+
+                Push_Notification(notificationPayload, registrationToken);
 
                 return res.status(200).json(
                   success("Login Successfull", {
@@ -585,10 +594,12 @@ exports.Chnage_Password = (req, res) => {
       .status(400)
       .json(error("new_password not less then 6 digit", {}));
   } else {
+    
     var params = {
       UserName: req.body.user_name,
       OldPassword: req.body.old_password,
       NewPassword: req.body.new_password,
+      UserID: req.userData.UserID,
     };
 
     User.FindCurrentPasswordUser(
@@ -607,6 +618,24 @@ exports.Chnage_Password = (req, res) => {
 
             (err, _data) => {
               if (!err) {
+                User.LastLoginFCMToken(params, (err, data) => {
+                  if (err) {
+                    return res.status(400).json(error("FCM Token not found"));
+                  }
+                  // console.log("Data :", data)
+
+                  const registrationToken = data[0]?.device_token; // Access first item and handle potential absence
+
+                  const notificationPayload = {
+                    image:
+                      "https://banner2.cleanpng.com/20201008/rtv/transparent-google-suite-icon-google-icon-5f7f985ccd60e3.5687494416021975968412.jpg",
+                    title: "your's password updated successfully!",
+                    body: "Important update available.",
+                  };
+
+                  Push_Notification(notificationPayload, registrationToken);
+                });
+
                 return res.status(200).json(success("Password Updated!"));
               } else {
                 return res.status(400).json(error("Password Not Updated", err));
@@ -618,6 +647,9 @@ exports.Chnage_Password = (req, res) => {
     );
   }
 };
+
+
+
 
 exports.Logout = (req, res) => {
   console.log("Logout");
@@ -835,14 +867,8 @@ exports.Export_User_Data = async (req, res) => {
         });
       });
 
-    
-
       const fileName = `data_${Date.now()}.xlsx`;
-      const filePath = path.join(
-        __dirname,
-        "../exports",
-        fileName
-      );
+      const filePath = path.join(__dirname, "../exports", fileName);
 
       workbook.xlsx
         .writeFile(filePath)
