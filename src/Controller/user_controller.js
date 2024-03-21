@@ -9,7 +9,7 @@ const user_details = require("../Models/User_details.js");
 const Excel = require("exceljs");
 const path = require("path");
 const fs = require("fs");
-const { Push_Notification } = require("../Utils.js/fireBase.js");
+const { pushNotificationMulti } = require("../Utils.js/fireBase.js");
 
 exports.Login_User = (req, res) => {
   console.log("Login");
@@ -182,7 +182,7 @@ exports.Login_UserV2 = (req, res) => {
                   body: "Your Login Successfull",
                 };
 
-                Push_Notification(notificationPayload, registrationToken);
+                pushNotificationMulti(notificationPayload, registrationToken);
 
                 return res.status(200).json(
                   success("Login Successfull", {
@@ -630,9 +630,10 @@ exports.Chnage_Password = (req, res) => {
                       "https://banner2.cleanpng.com/20201008/rtv/transparent-google-suite-icon-google-icon-5f7f985ccd60e3.5687494416021975968412.jpg",
                     title: "your's password updated successfully!",
                     body: "Important update available.",
+                   
                   };
 
-                  Push_Notification(notificationPayload, registrationToken);
+                  pushNotificationMulti([registrationToken], notificationPayload);
                 });
 
                 return res.status(200).json(success("Password Updated!"));

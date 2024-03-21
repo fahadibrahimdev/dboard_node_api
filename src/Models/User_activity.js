@@ -62,6 +62,4 @@ class User_activity {
   }
 }
 
-console.log("User Model");
-
 module.exports = User_activity;

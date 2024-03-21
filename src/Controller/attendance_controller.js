@@ -5,7 +5,7 @@ const { promise } = require("bcrypt/promises.js");
 const moment = require("moment");
 const { param } = require("../Routes/attendanceRouter.js");
 const User = require("../Models/User.js");
-const { Push_Notification } = require("../Utils.js/fireBase.js");
+const { pushNotificationMulti } = require("../Utils.js/fireBase.js");
 
 exports.User_Attendance = (req, res) => {
   console.log("Attendance");
@@ -177,7 +177,7 @@ exports.Edit_Attendance_Status = (req, res) => {
                   body: "Important update available.",
                 };
 
-                Push_Notification(notificationPayload, registrationToken);
+                pushNotificationMulti([registrationToken], notificationPayload);
               });
             } else if (deny == true) {
               User.LastLoginFCMToken(params, (err, data) => {
@@ -194,7 +194,7 @@ exports.Edit_Attendance_Status = (req, res) => {
                   title: "Your attendences Deiny!",
                   body: "Important update available.",
                 };
-                Push_Notification(notificationPayload, registrationToken);
+                pushNotificationMulti([registrationToken], notificationPayload);
               });
             }
             return res.status(200).json(success(" Updated1", { data }));
@@ -226,7 +226,7 @@ exports.Edit_Attendance_Status = (req, res) => {
                   body: "Important update available.",
                 };
 
-                Push_Notification(notificationPayload, registrationToken);
+                pushNotificationMulti([registrationToken], notificationPayload);
               });
             } else if (deny == true) {
               User.LastLoginFCMToken(params, (err, data) => {
@@ -243,7 +243,7 @@ exports.Edit_Attendance_Status = (req, res) => {
                   title: "Your attendences Deiny!",
                   body: "Important update available.",
                 };
-                Push_Notification(notificationPayload, registrationToken);
+                pushNotificationMulti([registrationToken], notificationPayload);
               });
             }
             return res.status(200).json(success(" Updated1", { data }));

@@ -503,6 +503,4 @@ class User {
   }
 }
 
-console.log("User Model");
-
 module.exports = User;
