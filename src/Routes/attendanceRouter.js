@@ -24,11 +24,7 @@ router.post(
   check_auth,
   attendance_controller.Create_Attendance
 );
-router.patch(
-  "/edit_attendance_status",
-  check_auth,
-  attendance_controller.Edit_Attendance_Status
-);
+
 router.delete(
   "/delete_attendance",
   check_auth,

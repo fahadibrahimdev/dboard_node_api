@@ -259,14 +259,14 @@ class User {
       result(e, null);
     }
   }
-  static async LastLoginFCMToken(params, result) {
+  static async LastLoginFCMToken(body, result) {
     try {
       console.log("LastLoginFCMToken");
 
       // var myQuery = "SELECT * FROM user_activity WHERE user_id ="+ body.userID +"ORDER BY last_login_time DESC LIMIT 1 ;";
-      var myQuery = "SELECT device_token FROM user_activity WHERE user_id =1 ORDER BY last_login_time DESC LIMIT 1 ;";
+      var myQuery = "SELECT device_token FROM user_activity WHERE user_id = " + body.UserID + " ORDER BY last_login_time DESC LIMIT 1 ;";
       
-      const res = await Query.executeWithParams(myQuery, params);
+      const res = await Query.executeWithParams(myQuery);
 
       result(null, res);
     } catch (e) {
