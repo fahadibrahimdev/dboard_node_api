@@ -4,6 +4,8 @@ const { success, error } = require("../Response/API-Response.js");
 const { promise } = require("bcrypt/promises.js");
 const moment = require("moment");
 const { param } = require("../Routes/attendanceRouter.js");
+const User = require("../Models/User.js");
+const { Push_Notification } = require("../Utils.js/fireBase.js");
 
 exports.User_Attendance = (req, res) => {
   console.log("Attendance");
@@ -123,6 +125,9 @@ exports.Create_Attendance = (req, res) => {
 };
 
 exports.Edit_Attendance_Status = (req, res) => {
+  var params = {
+    UserID: req.userData.UserID,
+  };
   if (!!req.body.attendance_id == false) {
     return res.status(400).json(error("attendance_id is mandatory", {}));
   } else {
@@ -143,7 +148,7 @@ exports.Edit_Attendance_Status = (req, res) => {
           if (err) {
             return res.status(200).json(error("end_time not set!!", {}));
           } else {
-            return res.status(200).json(success(" Updated", data));
+            return res.status(200).json(success(" Updated time", data));
           }
         }
       );
@@ -156,7 +161,43 @@ exports.Edit_Attendance_Status = (req, res) => {
           if (err) {
             return res.status(200).json(error("end_time not set!!", {}));
           } else {
-            return res.status(200).json(success(" Updated", { data }));
+            if (approve == true) {
+              User.LastLoginFCMToken(params, (err, data) => {
+                if (err) {
+                  return res.status(400).json(error("FCM Token not found"));
+                }
+                // console.log("Data :", data)
+
+                const registrationToken = data[0]?.device_token; // Access first item and handle potential absence
+
+                const notificationPayload = {
+                  image:
+                    "https://banner2.cleanpng.com/20201008/rtv/transparent-google-suite-icon-google-icon-5f7f985ccd60e3.5687494416021975968412.jpg",
+                  title: "Your attendences Approved!",
+                  body: "Important update available.",
+                };
+
+                Push_Notification(notificationPayload, registrationToken);
+              });
+            } else if (deny == true) {
+              User.LastLoginFCMToken(params, (err, data) => {
+                if (err) {
+                  return res.status(400).json(error("FCM Token not found"));
+                }
+                // console.log("Data :", data)
+
+                const registrationToken = data[0]?.device_token; // Access first item and handle potential absence
+
+                const notificationPayload = {
+                  image:
+                    "https://banner2.cleanpng.com/20201008/rtv/transparent-google-suite-icon-google-icon-5f7f985ccd60e3.5687494416021975968412.jpg",
+                  title: "Your attendences Deiny!",
+                  body: "Important update available.",
+                };
+                Push_Notification(notificationPayload, registrationToken);
+              });
+            }
+            return res.status(200).json(success(" Updated1", { data }));
           }
         }
       );
@@ -169,7 +210,43 @@ exports.Edit_Attendance_Status = (req, res) => {
           if (err) {
             return res.status(200).json(error("end_time not set!!", {}));
           } else {
-            return res.status(200).json(success(" Updated", { data }));
+            if (approve == true) {
+              User.LastLoginFCMToken(params, (err, data) => {
+                if (err) {
+                  return res.status(400).json(error("FCM Token not found"));
+                }
+                // console.log("Data :", data)
+
+                const registrationToken = data[0]?.device_token; // Access first item and handle potential absence
+
+                const notificationPayload = {
+                  image:
+                    "https://banner2.cleanpng.com/20201008/rtv/transparent-google-suite-icon-google-icon-5f7f985ccd60e3.5687494416021975968412.jpg",
+                  title: "Your attendences Approved!",
+                  body: "Important update available.",
+                };
+
+                Push_Notification(notificationPayload, registrationToken);
+              });
+            } else if (deny == true) {
+              User.LastLoginFCMToken(params, (err, data) => {
+                if (err) {
+                  return res.status(400).json(error("FCM Token not found"));
+                }
+                // console.log("Data :", data)
+
+                const registrationToken = data[0]?.device_token; // Access first item and handle potential absence
+
+                const notificationPayload = {
+                  image:
+                    "https://banner2.cleanpng.com/20201008/rtv/transparent-google-suite-icon-google-icon-5f7f985ccd60e3.5687494416021975968412.jpg",
+                  title: "Your attendences Deiny!",
+                  body: "Important update available.",
+                };
+                Push_Notification(notificationPayload, registrationToken);
+              });
+            }
+            return res.status(200).json(success(" Updated1", { data }));
           }
         }
       );
@@ -301,63 +378,6 @@ exports.Apply_Leave = (req, res) => {
     });
   }
 };
-
-// exports.Edit_Leave_Status = (req, res) => {
-//   if (!!req.body.leave_id == false) {
-//     return res.status(400).json(error("leave_id is mandatory", {}));
-//   } else {
-//     const approve = /true/i.test(req.body.approve);
-//     const deny = /true/i.test(req.body.deny);
-
-//     if (
-//       (!!approve === true && !!deny === true) ||
-//       (!!approve === false && !!deny === false && !!req.body.end_time === false )
-//     ) {
-//       res.status(400).json(error("Invalid Data Provided!", {}));
-//     } else if ( !!approve === false && !!deny === false) {
-//       Attendance.EditLeaveStatus(
-//         req.userData.UserID,
-//         req.body.leave_id,
-//         null,
-//         (err, data) => {
-//           if (err) {
-//             return res.status(200).json(error(" Not set!!", {}));
-//           } else {
-//             return res.status(200).json(success(" Updated", data));
-//           }
-//         }
-//       );
-//     } else if (!!req.userData.UserID === false) {
-//       Attendance.EditLeaveStatus(
-//         null,
-//         req.body.leave_id,
-//         !!approve ? 2 : 3,
-//         (err, data) => {
-//           if (err) {
-//             return res.status(200).json(error(" not set!!", {}));
-//           } else {
-//             return res.status(200).json(success(" Updated", { data }));
-//           }
-//         }
-//       );
-//     } else if (!!req.body.end_time) {
-//       Attendance.EditLeaveStatus(
-//         req.userData.UserID,
-//         req.body.leave_id,
-//         !!approve ? 2 : 3,
-//         (err, data) => {
-//           if (err) {
-//             return res.status(200).json(error(" not set!!", {}));
-//           } else {
-//             return res.status(200).json(success(" Updated", { data }));
-//           }
-//         }
-//       );
-//     } else {
-//       res.status(400).json(error("Invalid Data Provided!", {}));
-//     }
-//   }
-// };
 
 exports.Edit_Leave_Status = (req, res) => {
   const { leave_id, approve, deny } = req.body;

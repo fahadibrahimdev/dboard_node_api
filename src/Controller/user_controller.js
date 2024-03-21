@@ -594,7 +594,6 @@ exports.Chnage_Password = (req, res) => {
       .status(400)
       .json(error("new_password not less then 6 digit", {}));
   } else {
-    
     var params = {
       UserName: req.body.user_name,
       OldPassword: req.body.old_password,
@@ -647,9 +646,6 @@ exports.Chnage_Password = (req, res) => {
     );
   }
 };
-
-
-
 
 exports.Logout = (req, res) => {
   console.log("Logout");
