@@ -6,6 +6,7 @@ const moment = require("moment");
 const { param } = require("../Routes/attendanceRouter.js");
 const User = require("../Models/User.js");
 const { pushNotificationMulti } = require("../Utils.js/fireBase.js");
+const { FcmTokenForPushNotification } = require("../Utils.js/CommonUtils.js");
 
 exports.User_Attendance = (req, res) => {
   console.log("Attendance");
@@ -125,9 +126,6 @@ exports.Create_Attendance = (req, res) => {
 };
 
 exports.Edit_Attendance_Status = (req, res) => {
-  var params = {
-    UserID: req.userData.UserID,
-  };
   if (!!req.body.attendance_id == false) {
     return res.status(400).json(error("attendance_id is mandatory", {}));
   } else {
@@ -162,42 +160,31 @@ exports.Edit_Attendance_Status = (req, res) => {
             return res.status(200).json(error("end_time not set!!", {}));
           } else {
             if (approve == true) {
-              User.LastLoginFCMToken(params, (err, data) => {
-                if (err) {
-                  return res.status(400).json(error("FCM Token not found"));
-                }
-                // console.log("Data :", data)
-
-                const registrationToken = data[0]?.device_token; // Access first item and handle potential absence
-
-                const notificationPayload = {
+              params = {
+                // Access first item and handle potential absence
+                UserID: req.userData.UserID,
+                notificationPayload: {
                   image:
                     "https://banner2.cleanpng.com/20201008/rtv/transparent-google-suite-icon-google-icon-5f7f985ccd60e3.5687494416021975968412.jpg",
-                  title: "Your attendences Approved!",
+                  title: "Your attendences approved!",
                   body: "Important update available.",
-                };
-
-                pushNotificationMulti([registrationToken], notificationPayload);
-              });
+                },
+              };
+              FcmTokenForPushNotification(params);
             } else if (deny == true) {
-              User.LastLoginFCMToken(params, (err, data) => {
-                if (err) {
-                  return res.status(400).json(error("FCM Token not found"));
-                }
-                // console.log("Data :", data)
-
-                const registrationToken = data[0]?.device_token; // Access first item and handle potential absence
-
-                const notificationPayload = {
+              params = {
+                // Access first item and handle potential absence
+                UserID: req.userData.UserID,
+                notificationPayload: {
                   image:
                     "https://banner2.cleanpng.com/20201008/rtv/transparent-google-suite-icon-google-icon-5f7f985ccd60e3.5687494416021975968412.jpg",
-                  title: "Your attendences Deiny!",
+                  title: "Your attendences deny!",
                   body: "Important update available.",
-                };
-                pushNotificationMulti([registrationToken], notificationPayload);
-              });
+                },
+              };
+              FcmTokenForPushNotification(params);
             }
-            return res.status(200).json(success(" Updated1", { data }));
+            return res.status(200).json(success(" Updated0", { data }));
           }
         }
       );
@@ -211,40 +198,29 @@ exports.Edit_Attendance_Status = (req, res) => {
             return res.status(200).json(error("end_time not set!!", {}));
           } else {
             if (approve == true) {
-              User.LastLoginFCMToken(params, (err, data) => {
-                if (err) {
-                  return res.status(400).json(error("FCM Token not found"));
-                }
-                // console.log("Data :", data)
-
-                const registrationToken = data[0]?.device_token; // Access first item and handle potential absence
-
-                const notificationPayload = {
+              params = {
+                // Access first item and handle potential absence
+                UserID: req.userData.UserID,
+                notificationPayload: {
                   image:
                     "https://banner2.cleanpng.com/20201008/rtv/transparent-google-suite-icon-google-icon-5f7f985ccd60e3.5687494416021975968412.jpg",
-                  title: "Your attendences Approved!",
+                  title: "Your attendences approved!",
                   body: "Important update available.",
-                };
-
-                pushNotificationMulti([registrationToken], notificationPayload);
-              });
+                },
+              };
+              FcmTokenForPushNotification(params);
             } else if (deny == true) {
-              User.LastLoginFCMToken(params, (err, data) => {
-                if (err) {
-                  return res.status(400).json(error("FCM Token not found"));
-                }
-                // console.log("Data :", data)
-
-                const registrationToken = data[0]?.device_token; // Access first item and handle potential absence
-
-                const notificationPayload = {
+              params = {
+                // Access first item and handle potential absence
+                UserID: req.userData.UserID,
+                notificationPayload: {
                   image:
                     "https://banner2.cleanpng.com/20201008/rtv/transparent-google-suite-icon-google-icon-5f7f985ccd60e3.5687494416021975968412.jpg",
-                  title: "Your attendences Deiny!",
+                  title: "Your attendences deny!",
                   body: "Important update available.",
-                };
-                pushNotificationMulti([registrationToken], notificationPayload);
-              });
+                },
+              };
+              FcmTokenForPushNotification(params);
             }
             return res.status(200).json(success(" Updated1", { data }));
           }

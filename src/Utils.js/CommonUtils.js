@@ -1,4 +1,7 @@
 const nodemailer = require("nodemailer");
+const { pushNotificationMulti } = require("../Utils.js/fireBase.js");
+const { FcmTokenForPushNotification } = require("../Utils.js/CommonUtils.js");
+const User = require("../Models/User.js");
 
 exports.getCurrentDateTimeString = () => {
   const date = new Date();
@@ -68,5 +71,17 @@ exports.sendEmailWithAttachment = function (params) {
       return console.log(error);
     }
     console.log("Message sent: %s", info.messageId);
+  });
+};
+
+exports.FcmTokenForPushNotification = function (params) {
+  User.LastLoginFCMToken(params, (err, data) => {
+    if (err) {
+      return res.status(400).json(error("FCM Token not found"));
+    }
+    // console.log("Data :", data)
+
+    const registrationToken = data[0]?.device_token;
+    pushNotificationMulti([registrationToken], params.notificationPayload);
   });
 };
