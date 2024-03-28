@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 const { pushNotificationMulti } = require("../Utils.js/fireBase.js");
-const { FcmTokenForPushNotification } = require("../Utils.js/CommonUtils.js");
+
 const User = require("../Models/User.js");
 
 exports.getCurrentDateTimeString = () => {
