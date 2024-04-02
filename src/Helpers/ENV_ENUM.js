@@ -1,9 +1,9 @@
 const ENV_ENUM = {
   QA: {
-    dbName: "thundertechsol_mab_qa",
+    dbName: "thundertechsol_dboard_qa",
   },
   UAT: {
-    dbName: "thundertechsol_mab_uat",
+    dbName: "thundertechsol_dboard_uat",
   },
   PROD: {
     dbName: "thundertechsol_mab_prod",
