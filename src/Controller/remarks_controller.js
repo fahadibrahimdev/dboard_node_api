@@ -1,7 +1,7 @@
 const { now } = require("moment");
 const Remarks = require("../Models/Remarks.js");
 const { success, error } = require("../Response/API-Response.js");
-const { promise } = require("bcrypt/promises.js");
+const Attendance = require("../Models/Attendance.js");
 
 exports.Filter_Remarks = (req, res) => {
   if (!!req.body.attendance_id == false) {
@@ -70,41 +70,90 @@ exports.Filter_Remarks = (req, res) => {
   promiseExecution();
 };
 
+// exports.Create_Remarks = (req, res) => {
+//   if (
+//     !!req.body.comments == false ||
+//     !!req.body.attendance_id == false ||
+//     !!req.userData.UserID == false
+//   ) {
+//     return res
+//       .status(400)
+//       .json(error("attendance_id/comments not provided", {}));
+//   } else {
+//     console.log("Remarks");
+//     const currentDate = new Date();
+//     const createdTime = currentDate.toISOString();
+//     var params = {
+//       comments: req.body.comments,
+//       user_id: req.userData.UserID,
+//       attendance_id: req.body.attendance_id,
+//       created_time: createdTime,
+//     };
+
+//     Remarks.Create_Remarks(params, (err) => {
+//       if (err) {
+//         return res
+//           .status(400)
+//           .json(
+//             error(
+//               "Error while creating remarks. No attendance found for this id",
+//               {}
+//             )
+//           );
+//       }
+//        else {
+//         Attendance.FitchUserDeviceToken(params, (callback) => {
+//           console.log("device_token", device_token);
+//           if (!device_token) {
+//             return res
+//               .status(400)
+//               .json(error("Error while fetching user device token", {}));
+//           } 
+//           else {
+//             return res
+//               .status(200)
+//               .json(success("User DeviceTokens! ", { device_token }));
+//           }
+//         });
+//       }
+//     });
+//   }
+// };
+
+
 exports.Create_Remarks = (req, res) => {
-  if (
-    !!req.body.comments == false ||
-    !!req.body.attendance_id == false ||
-    !!req.userData.UserID == false
-  ) {
-    return res
-      .status(400)
-      .json(error("attendance_id/comments not provided", {}));
+  if (!req.body.comments || !req.body.attendance_id || !req.userData.UserID) {
+    return res.status(400).json(error("attendance_id/comments not provided", {}));
   } else {
     console.log("Remarks");
     const currentDate = new Date();
-    const createdTime = currentDate.toISOString(); 
+    const createdTime = currentDate.toISOString();
     var params = {
-      
       comments: req.body.comments,
       user_id: req.userData.UserID,
       attendance_id: req.body.attendance_id,
-      created_time:createdTime,
+      created_time: createdTime,
     };
 
-    Remarks.Create_Remarks(
-      params,
+    Remarks.Create_Remarks(params, (err) => {
+      if (err) {
+        return res.status(400).json(error("Error while creating remarks. No attendance found for this id", {}));
+      } else {
+        Attendance.FitchUserDeviceToken(params, (err, result) => {
+          if (err) {
+            return res.status(400).json(error("Error while fetching user device token", {}));
+          } else if(!!err){
+                  
 
-      (err, data) => {
-        if (err) {
-          return res
-            .status(400)
-            .json(error("Error while creating remarks. No atttendence foundfor this id ", {}));
-        } else {
-          return res
-            .status(200)
-            .json(error("Remarks Created  successfull", {data}));
-        }
+          }
+          
+          
+          else {
+            console.log("device_token", result);
+            return res.status(200).json(success("User DeviceTokens! ",  result ));
+          }
+        });
       }
-    );
+    });
   }
 };

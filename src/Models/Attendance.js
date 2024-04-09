@@ -535,6 +535,19 @@ class Attendance {
     //   } else result(err, null);
     // });
   }
+  static async FitchUserDeviceToken(body, result) {
+    try {
+      console.log("FitchUserDeviceToken");
+      var myQuery = 'SELECT device_token FROM user_activity WHERE is_session_completed=0 AND user_id IN (SELECT ul.user_id FROM user_attendances a JOIN user_lookups ul ON a.team_id = ul.lookup_id WHERE a.id ='+body.attendance_id + ');'
+      const res = await Query.execute(myQuery);
+  
+      result(null, res);
+    } catch (e) {
+      result(e, null);
+    }
+  }
+  
+
   
 }
 

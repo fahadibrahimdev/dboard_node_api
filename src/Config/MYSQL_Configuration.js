@@ -1,4 +1,4 @@
-const ENV_ENUM = require("../Helpers/ENV_ENUM");
+const ENV_ENUM = require ("../Helpers/ENV_ENUM");
 
 var myDBName = "";
 if (!!process.env.Environment) {
