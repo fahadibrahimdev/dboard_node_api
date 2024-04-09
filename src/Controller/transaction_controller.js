@@ -5,7 +5,7 @@ const param = require("../Routes/transactionRouter");
 exports.User_transaction = async (req, res) => {
   console.log("User_transaction");
 
-  if (!!req.userData.user_id == false) {
+  if (!!req.userData.UserID == false) {
     return res.status(401).json(error("User ID (Auth) can't null", {}));
   } 
   else {
