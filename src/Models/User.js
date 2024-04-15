@@ -13,7 +13,6 @@ class User {
     this.password = User.password;
     this.device_token = User.device_token;
     this.platform = User.platform;
-    this.is_super_user = User.is_super_user;
     this.image = User.image;
     this.role = User.role;
     this.new_user_req = User.new_user_req;
@@ -219,7 +218,7 @@ class User {
     try {
       console.log("GetUserData");
       var myQuery =
-        "SELECT users.id, users.full_name, users.user_name, users.platform, users.email, users.mobile, users.dob, users.is_super_user, users.image, roles.id as role_id,  roles.name,roles.code FROM users JOIN roles ON users.role = roles.id WHERE users.id = " +
+        "SELECT users.id, users.full_name, users.user_name, users.email, users.mobile, users.dob, users.image, roles.id as role_id,  roles.name,roles.code FROM users JOIN roles ON users.role = roles.id WHERE users.id = " +
         body.UserID;
       const res = await Query.execute(myQuery);
 

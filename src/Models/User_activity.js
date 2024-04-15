@@ -44,7 +44,7 @@ class User_activity {
         "VALUE ( '" +
         body.DeviceToken +
         "','" +
-        body.platform +
+        body.Platform +
         "','" +
         body.UserID +
         "','" +

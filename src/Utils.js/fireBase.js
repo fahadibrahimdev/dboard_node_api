@@ -34,9 +34,12 @@ exports.pushNotificationMulti = async (
   //   body: "Important update available.",
   // };
 
-  for (const token of registrationToken) {
-    await pushNotificationSingle(token, notificationPayload);
-    console.log("Notification sent to:", token);
-  }
-  console.log("All notifications sent!");
+  // for (const token of registrationToken) {
+  //   await pushNotificationSingle(token, notificationPayload);
+  //   console.log("Notification sent to:", token);
+  // }
+
+  console.log("Push Notification Tokens: ", registrationToken);
+  console.log("Push Notification notificationPayload: ", notificationPayload);
+  console.log("All Push notifications sent!");
 };

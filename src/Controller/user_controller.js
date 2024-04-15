@@ -80,8 +80,6 @@ exports.Login_User = (req, res) => {
                 user[0].device_token = req.body.device_token;
                 user[0].platform = req.body.platform;
 
-                user[0].is_super_user = !!user[0].is_super_user;
-
                 return res.status(200).json(
                   success("Login Successfull", {
                     token: token,
@@ -171,7 +169,6 @@ exports.Login_UserV2 = (req, res) => {
               if (!err) {
                 user[0].device_token = req.body.device_token;
                 user[0].platform = req.body.platform;
-                user[0].is_super_user = !!user[0].is_super_user;
 
                 const registrationToken = user[0].device_token;
                 // "ezNiZnyiSYKJenINFQAOvT:APA91bFKQfob1USeI8wWkK9hauC331-yFGc5i9wdCwQyasUYJgbviaSEaybalXrZ_UEQp6Ev7ADqYldVVXriSm6orc6rfIrnPkX2HYhR7dvY9W_YPnJsHIWleolAgQKYxMkXzpdIMcQZ";
@@ -238,9 +235,6 @@ exports.Signup_User = (req, res) => {
             mobile: !!req.body.mobile ? req.body.mobile : "",
             device_token: !!req.body.device_token ? req.body.device_token : "",
             platform: !!req.body.platform ? req.body.platform : "",
-            is_super_user: !!req.body.is_super_user
-              ? req.body.is_super_user
-              : 0,
             role: !!req.body.role ? req.body.role : 1,
             new_user_req: !!req.body.new_user_req ? req.body.new_user_req : 1,
           });
@@ -630,10 +624,12 @@ exports.Chnage_Password = (req, res) => {
                       "https://banner2.cleanpng.com/20201008/rtv/transparent-google-suite-icon-google-icon-5f7f985ccd60e3.5687494416021975968412.jpg",
                     title: "your's password updated successfully!",
                     body: "Important update available.",
-                   
                   };
 
-                  pushNotificationMulti([registrationToken], notificationPayload);
+                  pushNotificationMulti(
+                    [registrationToken],
+                    notificationPayload
+                  );
                 });
 
                 return res.status(200).json(success("Password Updated!"));

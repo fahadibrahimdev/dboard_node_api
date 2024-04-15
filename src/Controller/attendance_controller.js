@@ -1,11 +1,7 @@
-const { now } = require("moment/moment.js");
 const Attendance = require("../Models/Attendance");
 const { success, error } = require("../Response/API-Response.js");
-const { promise } = require("bcrypt/promises.js");
 const moment = require("moment");
 
-const User = require("../Models/User.js");
-const { pushNotificationMulti } = require("../Utils.js/fireBase.js");
 const { FcmTokenForPushNotification } = require("../Utils.js/CommonUtils.js");
 
 exports.User_Attendance = (req, res) => {
