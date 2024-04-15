@@ -9,7 +9,10 @@ const user_details = require("../Models/User_details.js");
 const Excel = require("exceljs");
 const path = require("path");
 const fs = require("fs");
-const { pushNotificationMulti, checkFirebaseConnection } = require("../Utils.js/fireBase.js");
+const {
+  pushNotificationMulti,
+  checkFirebaseConnection,
+} = require("../Utils.js/fireBase.js");
 
 exports.Login_User = (req, res) => {
   console.log("Login");
@@ -167,10 +170,7 @@ exports.Login_UserV2 = (req, res) => {
           User_activity.UpdateTokenInfoV2(params2, (_data) => {
             User_activity.insert_user_activity(params2, (err, _data) => {
               if (!err) {
-                
-
-                const registrationToken =
-                 req.body.device_token;
+                const registrationToken = req.body.device_token;
 
                 const notificationPayload = {
                   image:
@@ -179,8 +179,7 @@ exports.Login_UserV2 = (req, res) => {
                   body: "Your Login Successfull",
                 };
 
-                // checkFirebaseConnection();
-                pushNotificationMulti( [registrationToken], notificationPayload);
+                pushNotificationMulti([registrationToken], notificationPayload);
 
                 return res.status(200).json(
                   success("Login Successfull", {

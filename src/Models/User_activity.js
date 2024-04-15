@@ -1,4 +1,5 @@
 const Query = require("../Helpers/queryHelper");
+const mysql = require("mysql");
 
 class User_activity {
   constructor(User_activity) {
