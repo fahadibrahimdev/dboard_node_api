@@ -1,5 +1,3 @@
-const { verify } = require("jsonwebtoken");
-const sql = require("../Config/MYSQL_Configuration");
 const Query = require("../Helpers/queryHelper");
 
 class Transaction {
@@ -71,7 +69,9 @@ class Transaction {
         "," +
         body.UserID +
         "," +
-        " NULL, NULL,NULL ,NULL, NULL, NULL, NULL " +
+        " NULL, NULL, NULL ,'" + 
+        body.created_time +
+        "', NULL, NULL, NULL " +
         ",'" +
         body.platform +
         "','" +
@@ -246,7 +246,7 @@ class Transaction {
       }
       if (!!body.fb_page) {
         myWhereQuery =
-          myWhereQuery + "transaction.platform = '" + body.fb_page + "' AND ";
+          myWhereQuery + "transaction.fb_page LIKE '%" + body.fb_page + "%' AND ";
       }
       if (!!body.backend) {
         myWhereQuery =

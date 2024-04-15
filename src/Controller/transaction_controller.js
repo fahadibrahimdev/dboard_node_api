@@ -1,6 +1,5 @@
 const Transaction = require("../Models/Transaction");
 const { success, error } = require("../Response/API-Response.js");
-const param = require("../Routes/transactionRouter");
 
 exports.User_transaction = async (req, res) => {
   console.log("User_transaction");
@@ -58,16 +57,14 @@ exports.Creat_transaction = (req, res) => {
     !!req.userData.UserID == false ||
     !!req.body.team_id == false ||
     !!req.body.shift_id == false ||
-    !!req.body.lead_user_id == false ||
     !!req.body.type == false ||
-    !!req.body.game == false ||
-    !!req.body.amount == false
+    !!req.body.game == false 
   ) {
     return res
       .status(400)
       .json(
         error(
-          "Team ID/shift_id /lead_user_id/type(cash)/game/created_by mandatory",
+          "Team ID / shift_id / type / game / amount mandatory",
           {}
         )
       );
@@ -76,10 +73,10 @@ exports.Creat_transaction = (req, res) => {
       UserID: req.userData.UserID,
       team_id: req.body.team_id,
       shift_id: req.body.shift_id,
-      lead_user_id: req.body.lead_user_id,
+      lead_user_id: !!req.body.lead_user_id ? req.body.lead_user_id : null,
       type: parseInt(req.body.type),
       game: req.body.game,
-      amount: req.body.amount,
+      amount: !!req.body.amount ? req.body.amount : 0,
       UserID: req.userData.UserID,
       is_active: !!req.body.is_active ? req.body.is_active : 1,
       created_time: new Date().toISOString(),
@@ -233,6 +230,12 @@ exports.Filter_transaction = async (req, res) => {
     user_id: req.body.user_id,
     team_id: req.body.team_id,
     shift_id: req.body.shift_id,
+    type : req.body.type,
+    amount : req.body.amount,
+    game : req.body.game,
+    platform : req.body.platform,
+    fb_page : req.body.fb_page,
+    backend : req.body.backend,
   };
 
   Transaction.FilterTransaction(params, (err, data) => {

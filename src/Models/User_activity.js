@@ -1,6 +1,3 @@
-const { verify } = require("jsonwebtoken");
-const sql = require("../Config/MYSQL_Configuration");
-const { param } = require("../Routes/transactionRouter");
 const Query = require("../Helpers/queryHelper");
 
 class User_activity {
@@ -39,19 +36,13 @@ class User_activity {
     try {
       console.log("insert_user_activity ");
 
-      var myQuery =
-        "INSERT INTO user_activity (device_token,last_login_platform,user_id,last_login_time,device_info) " +
-        "VALUE ( '" +
-        body.DeviceToken +
-        "','" +
-        body.Platform +
-        "','" +
-        body.UserID +
-        "','" +
-        body.Login_time +
-        "','" +
-        body.DeviceInfo +
-        "');";
+      const myQuery = `INSERT INTO user_activity (device_token, last_login_platform, user_id, last_login_time, device_info) VALUES (
+        ${mysql.escape(body.DeviceToken)},
+        ${mysql.escape(body.Platform)},
+        ${mysql.escape(body.UserID)},
+        ${mysql.escape(body.Login_time)},
+        ${mysql.escape(body.DeviceInfo)}
+    )`;
 
       const res = await Query.executeWithParams(myQuery);
 

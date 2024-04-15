@@ -26,7 +26,7 @@ router.get(
   transaction_controller.Transaction_by_team_id
 );
 router.put(
-  "/creat_transaction",
+  "/create_transaction",
   check_auth,
   transaction_controller.Creat_transaction
 );
