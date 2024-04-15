@@ -233,8 +233,6 @@ exports.Signup_User = (req, res) => {
             user_name: req.body.user_name,
             full_name: req.body.full_name,
             mobile: !!req.body.mobile ? req.body.mobile : "",
-            device_token: !!req.body.device_token ? req.body.device_token : "",
-            platform: !!req.body.platform ? req.body.platform : "",
             role: !!req.body.role ? req.body.role : 1,
             new_user_req: !!req.body.new_user_req ? req.body.new_user_req : 1,
           });
@@ -247,7 +245,6 @@ exports.Signup_User = (req, res) => {
                 {
                   Email: newUser.email,
                   UserName: newUser.user_name,
-
                   UserID: data.insertId,
                 },
                 process.env.JWT_KEY,

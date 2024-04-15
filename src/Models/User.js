@@ -11,8 +11,6 @@ class User {
     this.dob = User.dob;
     this.mobile = User.mobile;
     this.password = User.password;
-    this.device_token = User.device_token;
-    this.platform = User.platform;
     this.image = User.image;
     this.role = User.role;
     this.new_user_req = User.new_user_req;
