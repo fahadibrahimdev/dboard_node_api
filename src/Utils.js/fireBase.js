@@ -1,6 +1,19 @@
 const firebase_admin = require("../Config/FireBase_Configuration.js");
 // Access messaging service
 const messaging = firebase_admin.messaging();
+const db = firebase_admin.firestore();
+
+
+exports.checkFirebaseConnection= async () => {
+  try {
+    console.log('Successfully retrieved data from Firestore 00:');
+    const snapshot = await db.collection('fahadCollect').get(); // Replace 'test' with your actual collection
+    console.log('Successfully retrieved data from Firestore:', snapshot.docs);
+  } catch (error) {
+    console.error('Error connecting to Firestore:', error);
+  }
+}
+
 
 const pushNotificationSingle = async (
   registrationToken,
@@ -12,8 +25,10 @@ const pushNotificationSingle = async (
       token: registrationToken,
     };
 
+
+    console.log("Notification sent successfully:", message);
     const response = await messaging.send(message);
-    console.log("Notification sent successfully:", response);
+    console.log("Notification sent successfully22:", response);
     return Promise.resolve(); // Resolve the promise after successful sending
   } catch (error) {
     console.error("Error sending notification:", error);
@@ -21,25 +36,16 @@ const pushNotificationSingle = async (
   }
 };
 
+
 exports.pushNotificationMulti = async (
   registrationToken,
   notificationPayload
 ) => {
-  // Example usage (replace with your actual logic)
-  // const registrationToken =
-  //   "ezNiZnyiSYKJenINFQAOvT:APA91bFKQfob1USeI8wWkK9hauC331-yFGc5i9wdCwQyasUYJgbviaSEaybalXrZ_UEQp6Ev7ADqYldVVXriSm6orc6rfIrnPkX2HYhR7dvY9W_YPnJsHIWleolAgQKYxMkXzpdIMcQZ";
-  // const notificationPayload = {
-  //   image: 'https://banner2.cleanpng.com/20201008/rtv/transparent-google-suite-icon-google-icon-5f7f985ccd60e3.5687494416021975968412.jpg',
-  //   title: "Breaking News!",
-  //   body: "Important update available.",
-  // };
+   
 
-  // for (const token of registrationToken) {
-  //   await pushNotificationSingle(token, notificationPayload);
-  //   console.log("Notification sent to:", token);
-  // }
-
-  console.log("Push Notification Tokens: ", registrationToken);
-  console.log("Push Notification notificationPayload: ", notificationPayload);
-  console.log("All Push notifications sent!");
+  for (const token of registrationToken) {
+    await pushNotificationSingle(token, notificationPayload);
+    console.log("Notification sent to:", token);
+  }
+  console.log("All notifications sent!");
 };

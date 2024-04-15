@@ -9,7 +9,7 @@ const user_details = require("../Models/User_details.js");
 const Excel = require("exceljs");
 const path = require("path");
 const fs = require("fs");
-const { pushNotificationMulti } = require("../Utils.js/fireBase.js");
+const { pushNotificationMulti, checkFirebaseConnection } = require("../Utils.js/fireBase.js");
 
 exports.Login_User = (req, res) => {
   console.log("Login");
@@ -167,11 +167,11 @@ exports.Login_UserV2 = (req, res) => {
           User_activity.UpdateTokenInfoV2(params2, (_data) => {
             User_activity.insert_user_activity(params2, (err, _data) => {
               if (!err) {
-                user[0].device_token = req.body.device_token;
-                user[0].platform = req.body.platform;
+                
 
-                const registrationToken = user[0].device_token;
-                // "ezNiZnyiSYKJenINFQAOvT:APA91bFKQfob1USeI8wWkK9hauC331-yFGc5i9wdCwQyasUYJgbviaSEaybalXrZ_UEQp6Ev7ADqYldVVXriSm6orc6rfIrnPkX2HYhR7dvY9W_YPnJsHIWleolAgQKYxMkXzpdIMcQZ";
+                const registrationToken =
+                 req.body.device_token;
+
                 const notificationPayload = {
                   image:
                     "https://banner2.cleanpng.com/20201008/rtv/transparent-google-suite-icon-google-icon-5f7f985ccd60e3.5687494416021975968412.jpg",
@@ -179,7 +179,8 @@ exports.Login_UserV2 = (req, res) => {
                   body: "Your Login Successfull",
                 };
 
-                pushNotificationMulti(notificationPayload, registrationToken);
+                // checkFirebaseConnection();
+                pushNotificationMulti( [registrationToken], notificationPayload);
 
                 return res.status(200).json(
                   success("Login Successfull", {
@@ -623,7 +624,7 @@ exports.Chnage_Password = (req, res) => {
                     body: "Important update available.",
                   };
 
-                  pushNotificationMulti(
+                  pushNotificationSingle(
                     [registrationToken],
                     notificationPayload
                   );
