@@ -115,14 +115,14 @@ exports.Create_Remarks = (req, res) => {
                 const notificationPayload = {
                   image:
                     "https://banner2.cleanpng.com/20201008/rtv/transparent-google-suite-icon-google-icon-5f7f985ccd60e3.5687494416021975968412.jpg",
-                  title: "Welcome Back!",
-                  body: "You got a new Message!",
+                  title: "Remarks",
+                  body: "You got a new Comment!",
                 };
 
                 pushNotificationMulti(registrationToken, notificationPayload);
             return res
               .status(200)
-              .json(success("User DeviceTokens! ", { device_token }));
+              .json(success("Message Sent Successfully!", { }));
           }
         });
       }

@@ -557,7 +557,7 @@ class Attendance {
             WHERE 
                 (a.id = ${body.attendance_id} AND u.role IN (2,3) AND u.id <> ${body.user_id})
                 OR 
-                (a.id = ${body.attendance_id} AND u.id = a.user_id AND u.role = 1)
+                (a.id = ${body.attendance_id} AND a.user_id <> ${body.user_id} AND u.id = a.user_id AND u.role = 1)
         );
 `;
 
