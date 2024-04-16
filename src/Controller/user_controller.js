@@ -861,30 +861,41 @@ exports.Export_User_Data = async (req, res) => {
 
 exports.Push_Global_News = async (req, res) => {
   try {
-    var param = {
-      news_body: req.body.news_body,
-      news_title: req.body.news_title,
-    };
+    if (!!req.body.news_body == false || !!req.body.news_title == false) {
+      return res.status(400).json(error("Body / Title are mandatory", {}));
+    } else {
+      var param = {
+        news_body: req.body.news_body,
+        news_title: req.body.news_title,
+      };
 
-    User.Get_All_Users_FCM(param, (err, data) => {
-      if (err) {
-        console.error("Err Get_All_Users_FCM:", err);
-        res.status(500).send("Internal Server Error");
-        return;
-      } else {
-        const registrationToken = data.map((obj) => obj.device_token);
+      User.Get_All_Users_FCM(param, (err, data) => {
+        if (err) {
+          console.error("Err Get_All_Users_FCM:", err);
+          res.status(500).send("Internal Server Error");
+          return;
+        } else {
+          const registrationToken = data.map((obj) => obj.device_token);
 
-        const notificationPayload = {
-          image:
-            "https://banner2.cleanpng.com/20201008/rtv/transparent-google-suite-icon-google-icon-5f7f985ccd60e3.5687494416021975968412.jpg",
-          title: param.news_title,
-          body: param.news_body,
-        };
+          const notificationPayload = {
+            title: param.news_title,
+            body: param.news_body,
+          };
 
-        pushNotificationMulti(registrationToken, notificationPayload);
-        res.status(200).send("All notifications sent!");
-      }
-    });
+          const customData = {
+            type: "ALL_NEWS",
+            screen: "NEWS",
+          };
+
+          pushNotificationMulti(
+            registrationToken,
+            notificationPayload,
+            customData
+          );
+          return res.status(200).json(success("All notifications sent!", {}));
+        }
+      });
+    }
   } catch (error) {
     console.error("Error Get_All_Users_FCM:", error);
     res.status(500).send("Internal Server Error");

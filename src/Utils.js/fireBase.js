@@ -15,12 +15,14 @@ exports.checkFirebaseConnection = async () => {
 
 const pushNotificationSingle = async (
   registrationToken,
-  notificationPayload
+  notificationPayload,
+  customData = {}
 ) => {
   try {
     const message = {
       token: registrationToken,
       notification: notificationPayload, // Notification message content
+      data: customData,
     };
 
     const response = await messaging.send(message);
@@ -34,10 +36,11 @@ const pushNotificationSingle = async (
 
 exports.pushNotificationMulti = async (
   registrationToken,
-  notificationPayload
+  notificationPayload,
+  customData = {}
 ) => {
   for (const token of registrationToken) {
-    await pushNotificationSingle(token, notificationPayload);
+    await pushNotificationSingle(token, notificationPayload, customData);
     console.log("Notification sent to:", token);
     console.log("notificationPayload:", notificationPayload);
   }
