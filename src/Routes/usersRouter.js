@@ -35,5 +35,6 @@ router.post(
   user_controller.Get_Users_By_Teams_Id
 );
 router.post("/export_user_data", user_controller.Export_User_Data);
+router.post("/push_global_news",check_auth, user_controller.Push_Global_News);
 
 module.exports = router;

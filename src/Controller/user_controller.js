@@ -8,7 +8,7 @@ const { success, error } = require("../Response/API-Response.js");
 const user_details = require("../Models/User_details.js");
 const Excel = require("exceljs");
 const path = require("path");
-
+const { pushNotificationMulti } = require("../Utils.js/fireBase.js");
 
 exports.Login_User = (req, res) => {
   console.log("Login");
@@ -166,8 +166,6 @@ exports.Login_UserV2 = (req, res) => {
           User_activity.UpdateTokenInfoV2(params2, (_data) => {
             User_activity.insert_user_activity(params2, (err, _data) => {
               if (!err) {
-                
-
                 return res.status(200).json(
                   success("Login Successfull", {
                     token: token,
@@ -595,7 +593,22 @@ exports.Chnage_Password = (req, res) => {
 
             (err, _data) => {
               if (!err) {
-               
+                User.LastLoginFCMToken(params, (err, data) => {
+                  if (err) {
+                    return res.status(400).json(error("FCM Token not found"));
+                  }
+                  const registrationToken = data.map((obj) => obj.device_token);
+                  // data[0]?.device_token; // Access first item and handle potential absence
+
+                  const notificationPayload = {
+                    image:
+                      "https://banner2.cleanpng.com/20201008/rtv/transparent-google-suite-icon-google-icon-5f7f985ccd60e3.5687494416021975968412.jpg",
+                    title: "Alert",
+                    body: "Your password has been updated successfully!",
+                  };
+
+                  pushNotificationMulti(registrationToken, notificationPayload);
+                });
 
                 return res.status(200).json(success("Password Updated!"));
               } else {
@@ -842,6 +855,38 @@ exports.Export_User_Data = async (req, res) => {
     });
   } catch (error) {
     console.error("Error exporting user data:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+exports.Push_Global_News = async (req, res) => {
+  try {
+    var param = {
+      news_body: req.body.news_body,
+      news_title: req.body.news_title,
+    };
+
+    User.Get_All_Users_FCM(param, (err, data) => {
+      if (err) {
+        console.error("Err Get_All_Users_FCM:", err);
+        res.status(500).send("Internal Server Error");
+        return;
+      } else {
+        const registrationToken = data.map((obj) => obj.device_token);
+
+        const notificationPayload = {
+          image:
+            "https://banner2.cleanpng.com/20201008/rtv/transparent-google-suite-icon-google-icon-5f7f985ccd60e3.5687494416021975968412.jpg",
+          title: param.news_title,
+          body: param.news_body,
+        };
+
+        pushNotificationMulti(registrationToken, notificationPayload);
+        res.status(200).send("All notifications sent!");
+      }
+    });
+  } catch (error) {
+    console.error("Error Get_All_Users_FCM:", error);
     res.status(500).send("Internal Server Error");
   }
 };

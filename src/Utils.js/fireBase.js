@@ -39,6 +39,7 @@ exports.pushNotificationMulti = async (
   for (const token of registrationToken) {
     await pushNotificationSingle(token, notificationPayload);
     console.log("Notification sent to:", token);
+    console.log("notificationPayload:", notificationPayload);
   }
   console.log("All notifications sent!");
 };

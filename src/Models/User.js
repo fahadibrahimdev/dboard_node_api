@@ -259,12 +259,19 @@ class User {
   static async LastLoginFCMToken(body, result) {
     try {
       console.log("LastLoginFCMToken");
+     const myQuery = `
+    SELECT 
+        device_token 
+    FROM 
+        user_activity 
+    WHERE 
+        user_id = ${body.UserID} 
+        AND
+        is_session_completed = 0
+    ORDER BY 
+        last_login_time DESC 
+    `;
 
-      // var myQuery = "SELECT * FROM user_activity WHERE user_id ="+ body.userID +"ORDER BY last_login_time DESC LIMIT 1 ;";
-      var myQuery =
-        "SELECT device_token FROM user_activity WHERE user_id = " +
-        body.UserID +
-        " ORDER BY last_login_time DESC LIMIT 1 ;";
 
       const res = await Query.executeWithParams(myQuery);
 
@@ -498,6 +505,21 @@ class User {
       result(e, null);
     }
   }
+  static async Get_All_Users_FCM(body,result) {
+    try {
+      console.log("Get_All_Users_FCM");
+
+      var myQuery =
+        "SELECT device_token from user_activity where is_session_completed=0" ;
+
+      const res = await Query.executeWithParams(myQuery);
+
+      result(null, res);
+    } catch (e) {
+      result(e, null);
+    }
+  }
 }
+
 
 module.exports = User;
