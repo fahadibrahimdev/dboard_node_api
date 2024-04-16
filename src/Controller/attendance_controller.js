@@ -2,7 +2,6 @@ const Attendance = require("../Models/Attendance");
 const { success, error } = require("../Response/API-Response.js");
 const moment = require("moment");
 
-const { FcmTokenForPushNotification } = require("../Utils.js/CommonUtils.js");
 
 exports.User_Attendance = (req, res) => {
   console.log("Attendance");
@@ -156,29 +155,9 @@ exports.Edit_Attendance_Status = (req, res) => {
             return res.status(200).json(error("end_time not set!!", {}));
           } else {
             if (approve == true) {
-              params = {
-                // Access first item and handle potential absence
-                UserID: req.userData.UserID,
-                notificationPayload: {
-                  image:
-                    "https://banner2.cleanpng.com/20201008/rtv/transparent-google-suite-icon-google-icon-5f7f985ccd60e3.5687494416021975968412.jpg",
-                  title: "Your attendences approved!",
-                  body: "Important update available.",
-                },
-              };
-              FcmTokenForPushNotification(params);
+              
             } else if (deny == true) {
-              params = {
-                // Access first item and handle potential absence
-                UserID: req.userData.UserID,
-                notificationPayload: {
-                  image:
-                    "https://banner2.cleanpng.com/20201008/rtv/transparent-google-suite-icon-google-icon-5f7f985ccd60e3.5687494416021975968412.jpg",
-                  title: "Your attendences deny!",
-                  body: "Important update available.",
-                },
-              };
-              FcmTokenForPushNotification(params);
+              
             }
             return res.status(200).json(success(" Updated0", { data }));
           }
@@ -194,29 +173,9 @@ exports.Edit_Attendance_Status = (req, res) => {
             return res.status(200).json(error("end_time not set!!", {}));
           } else {
             if (approve == true) {
-              params = {
-                // Access first item and handle potential absence
-                UserID: req.userData.UserID,
-                notificationPayload: {
-                  image:
-                    "https://banner2.cleanpng.com/20201008/rtv/transparent-google-suite-icon-google-icon-5f7f985ccd60e3.5687494416021975968412.jpg",
-                  title: "Your attendences approved!",
-                  body: "Important update available.",
-                },
-              };
-              FcmTokenForPushNotification(params);
+              
             } else if (deny == true) {
-              params = {
-                // Access first item and handle potential absence
-                UserID: req.userData.UserID,
-                notificationPayload: {
-                  image:
-                    "https://banner2.cleanpng.com/20201008/rtv/transparent-google-suite-icon-google-icon-5f7f985ccd60e3.5687494416021975968412.jpg",
-                  title: "Your attendences deny!",
-                  body: "Important update available.",
-                },
-              };
-              FcmTokenForPushNotification(params);
+              
             }
             return res.status(200).json(success(" Updated1", { data }));
           }

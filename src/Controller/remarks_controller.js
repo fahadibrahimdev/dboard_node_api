@@ -2,6 +2,7 @@ const { now } = require("moment");
 const Remarks = require("../Models/Remarks.js");
 const { success, error } = require("../Response/API-Response.js");
 const Attendance = require("../Models/Attendance.js");
+const { pushNotificationMulti } = require("../Utils.js/fireBase.js");
 
 exports.Filter_Remarks = (req, res) => {
   if (!!req.body.attendance_id == false) {
@@ -70,60 +71,15 @@ exports.Filter_Remarks = (req, res) => {
   promiseExecution();
 };
 
-// exports.Create_Remarks = (req, res) => {
-//   if (
-//     !!req.body.comments == false ||
-//     !!req.body.attendance_id == false ||
-//     !!req.userData.UserID == false
-//   ) {
-//     return res
-//       .status(400)
-//       .json(error("attendance_id/comments not provided", {}));
-//   } else {
-//     console.log("Remarks");
-//     const currentDate = new Date();
-//     const createdTime = currentDate.toISOString();
-//     var params = {
-//       comments: req.body.comments,
-//       user_id: req.userData.UserID,
-//       attendance_id: req.body.attendance_id,
-//       created_time: createdTime,
-//     };
-
-//     Remarks.Create_Remarks(params, (err) => {
-//       if (err) {
-//         return res
-//           .status(400)
-//           .json(
-//             error(
-//               "Error while creating remarks. No attendance found for this id",
-//               {}
-//             )
-//           );
-//       }
-//        else {
-//         Attendance.FitchUserDeviceToken(params, (callback) => {
-//           console.log("device_token", device_token);
-//           if (!device_token) {
-//             return res
-//               .status(400)
-//               .json(error("Error while fetching user device token", {}));
-//           } 
-//           else {
-//             return res
-//               .status(200)
-//               .json(success("User DeviceTokens! ", { device_token }));
-//           }
-//         });
-//       }
-//     });
-//   }
-// };
-
-
 exports.Create_Remarks = (req, res) => {
-  if (!req.body.comments || !req.body.attendance_id || !req.userData.UserID) {
-    return res.status(400).json(error("attendance_id/comments not provided", {}));
+  if (
+    !!req.body.comments == false ||
+    !!req.body.attendance_id == false ||
+    !!req.userData.UserID == false
+  ) {
+    return res
+      .status(400)
+      .json(error("attendance_id/comments not provided", {}));
   } else {
     console.log("Remarks");
     const currentDate = new Date();
@@ -137,23 +93,41 @@ exports.Create_Remarks = (req, res) => {
 
     Remarks.Create_Remarks(params, (err) => {
       if (err) {
-        return res.status(400).json(error("Error while creating remarks. No attendance found for this id", {}));
-      } else {
-        Attendance.FitchUserDeviceToken(params, (err, result) => {
+        return res
+          .status(400)
+          .json(
+            error(
+              "Error while creating remarks. No attendance found for this id",
+              {}
+            )
+          );
+      }
+       else {
+        Attendance.FetchUserDeviceToken(params, (err,queryData) => {
           if (err) {
-            return res.status(400).json(error("Error while fetching user device token", {}));
-          } else if(!!err){
-                  
-
-          }
-          
-          
+            return res
+              .status(400)
+              .json(error("Error while fetching user device token", {}));
+          } 
           else {
-            console.log("device_token", result);
-            return res.status(200).json(success("User DeviceTokens! ",  result ));
+            const registrationToken = queryData.map((obj) => obj.device_token);
+
+                const notificationPayload = {
+                  image:
+                    "https://banner2.cleanpng.com/20201008/rtv/transparent-google-suite-icon-google-icon-5f7f985ccd60e3.5687494416021975968412.jpg",
+                  title: "Welcome Back!",
+                  body: "You got a new Message!",
+                };
+
+                pushNotificationMulti(registrationToken, notificationPayload);
+            return res
+              .status(200)
+              .json(success("User DeviceTokens! ", { device_token }));
           }
         });
       }
     });
   }
 };
+
+

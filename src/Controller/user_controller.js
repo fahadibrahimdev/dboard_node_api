@@ -8,11 +8,7 @@ const { success, error } = require("../Response/API-Response.js");
 const user_details = require("../Models/User_details.js");
 const Excel = require("exceljs");
 const path = require("path");
-const fs = require("fs");
-const {
-  pushNotificationMulti,
-  checkFirebaseConnection,
-} = require("../Utils.js/fireBase.js");
+
 
 exports.Login_User = (req, res) => {
   console.log("Login");
@@ -170,16 +166,7 @@ exports.Login_UserV2 = (req, res) => {
           User_activity.UpdateTokenInfoV2(params2, (_data) => {
             User_activity.insert_user_activity(params2, (err, _data) => {
               if (!err) {
-                const registrationToken = req.body.device_token;
-
-                const notificationPayload = {
-                  image:
-                    "https://banner2.cleanpng.com/20201008/rtv/transparent-google-suite-icon-google-icon-5f7f985ccd60e3.5687494416021975968412.jpg",
-                  title: "Welcome Back!",
-                  body: "Your Login Successfull",
-                };
-
-                pushNotificationMulti([registrationToken], notificationPayload);
+                
 
                 return res.status(200).json(
                   success("Login Successfull", {
@@ -608,26 +595,7 @@ exports.Chnage_Password = (req, res) => {
 
             (err, _data) => {
               if (!err) {
-                User.LastLoginFCMToken(params, (err, data) => {
-                  if (err) {
-                    return res.status(400).json(error("FCM Token not found"));
-                  }
-                  // console.log("Data :", data)
-
-                  const registrationToken = data[0]?.device_token; // Access first item and handle potential absence
-
-                  const notificationPayload = {
-                    image:
-                      "https://banner2.cleanpng.com/20201008/rtv/transparent-google-suite-icon-google-icon-5f7f985ccd60e3.5687494416021975968412.jpg",
-                    title: "your's password updated successfully!",
-                    body: "Important update available.",
-                  };
-
-                  pushNotificationSingle(
-                    [registrationToken],
-                    notificationPayload
-                  );
-                });
+               
 
                 return res.status(200).json(success("Password Updated!"));
               } else {

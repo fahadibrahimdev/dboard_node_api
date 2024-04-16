@@ -535,15 +535,32 @@ class Attendance {
     //   } else result(err, null);
     // });
   }
-  static async FitchUserDeviceToken(body, result) {
+  static async FetchUserDeviceToken(body, result) {
     try {
-      console.log("FitchUserDeviceToken");
-      var myQuery =
-        "SELECT ua.device_token, ua.user_id  FROM user_activity ua WHERE ua.is_session_completed = 0   AND ua.user_id IN ( SELECT ul.user_id   FROM user_attendances a    JOIN user_lookups ul ON a.team_id = ul.lookup_id      JOIN users u ON u.id = ul.user_id     WHERE (a.id = " +
-        body.attendance_id +
-        " AND u.role IN (2,3) AND u.id <> " +
-        body.user_id +
-        " )OR (a.id = 3 AND a.user_id <> 2 AND u.role = 1));";
+      console.log("FetchUserDeviceToken");
+
+      const myQuery = `
+    SELECT 
+        ua.device_token, 
+        ua.user_id 
+    FROM 
+        user_activity ua 
+    WHERE 
+        ua.is_session_completed = 0 
+        AND ua.user_id IN (
+            SELECT 
+                ul.user_id 
+            FROM 
+                user_attendances a 
+                JOIN user_lookups ul ON a.team_id = ul.lookup_id 
+                JOIN users u ON u.id = ul.user_id 
+            WHERE 
+                (a.id = ${body.attendance_id} AND u.role IN (2,3) AND u.id <> ${body.user_id})
+                OR 
+                (a.id = ${body.attendance_id} AND u.id = a.user_id AND u.role = 1)
+        );
+`;
+
       const res = await Query.execute(myQuery);
 
       result(null, res);

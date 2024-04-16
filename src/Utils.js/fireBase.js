@@ -23,9 +23,9 @@ const pushNotificationSingle = async (
       notification: notificationPayload, // Notification message content
     };
 
-    console.log("Notification sent successfully:", message);
+    
     const response = await messaging.send(message);
-    console.log("Notification sent successfully22:", response);
+    
     return Promise.resolve(); // Resolve the promise after successful sending
   } catch (error) {
     console.error("Error sending notification:", error);
