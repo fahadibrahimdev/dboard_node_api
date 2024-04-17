@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #Database details
-DATABASE_NAME="thundertechsol_mab_uat"
+DATABASE_NAME="thundertechsol_dboard_qa"
 DATABASE_USERNAME="thundertechsol_mab"
 DATABASE_PASSWORD="MABuser123$"
 DATABASE_HOST="23.106.120.176"
