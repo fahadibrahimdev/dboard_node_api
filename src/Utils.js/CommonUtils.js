@@ -17,8 +17,8 @@ exports.sendEmail = function (params) {
     port: 465, // Default SMTP port for secure connections
     secure: true, // Use SSL/TLS
     auth: {
-      user: "fahad_e@thundertechsol.com", // Your Gmail address
-      pass: "VERdd123$fahad", // Your Gmail password
+      user: "fibrahim_dboard@thundertechsol.com", // Your Gmail address
+      pass: " VERdboard123", // Your Gmail password
     },
   });
 
@@ -46,8 +46,8 @@ exports.sendEmailWithAttachment = function (params) {
     port: 465, // Default SMTP port for secure connections
     secure: true, // Use SSL/TLS
     auth: {
-      user: "fahad_e@thundertechsol.com", // Your Gmail address
-      pass: "VERdd123$fahad", // Your Gmail password
+      user: "fibrahim_dboard@thundertechsol.com", // Your Gmail address
+      pass: " VERdboard123", // Your Gmail password
     },
   });
 

@@ -39,7 +39,7 @@ exports.scheduleCronJob = function (command, schedule) {
             filePath: "./Database_Info/Backups/" + fileName,
             subject:
               "Test Email with Attachment(" + process.env.Environment + ")",
-            from: "fahad_e@thundertechsol.com",
+            from: "fibrahim_dboard@thundertechsol.com",
           };
           sendEmailWithAttachment(params);
         } else {
@@ -52,7 +52,7 @@ exports.scheduleCronJob = function (command, schedule) {
               "Hello from Node.js! This email has no attachment. Due to Error Code: " +
               code,
             subject: "Email FOR DB BACKUP (" + process.env.Environment + ")",
-            from: "fahad_e@thundertechsol.com",
+            from: "fibrahim_dboard@thundertechsol.com",
           };
           sendEmail(params);
         }
