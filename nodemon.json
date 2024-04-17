@@ -1,8 +1,0 @@
-{
-  "env": {
-    "JWT_KEY": "secret",
-    "Environment": "QA",
-    "EmailSender": "dbbackup_admin@thundertechsol.com",
-    "EmailSenderPassword": "n^z~.gRL]riK"
-  }
-}
