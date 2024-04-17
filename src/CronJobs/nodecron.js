@@ -35,11 +35,10 @@ exports.scheduleCronJob = function (command, schedule) {
           console.log("FileName:", fileName);
           var params = {
             to: "meerasad636@gmail.com",
-            text: "Hello from Node.js! This email has an attachment.",
+            text: "Hello from DBoard DB Admin! This email has an attachment check it out!",
             filePath: "./Database_Info/Backups/" + fileName,
             subject:
-              "Test Email with Attachment(" + process.env.Environment + ")",
-            from: "fibrahim_dboard@thundertechsol.com",
+              "DB Backup with Attachment(" + process.env.Environment + ")",
           };
           sendEmailWithAttachment(params);
         } else {
@@ -49,10 +48,9 @@ exports.scheduleCronJob = function (command, schedule) {
           var params = {
             to: "meerasad636@gmail.com",
             text:
-              "Hello from Node.js! This email has no attachment. Due to Error Code: " +
+              "Hello from DBoard DB Admin! This email has no attachment. Due to Error Code: " +
               code,
-            subject: "Email FOR DB BACKUP (" + process.env.Environment + ")",
-            from: "fibrahim_dboard@thundertechsol.com",
+            subject:"DB Backup with Attachment(" + process.env.Environment + ")",
           };
           sendEmail(params);
         }

@@ -17,14 +17,14 @@ exports.sendEmail = function (params) {
     port: 465, // Default SMTP port for secure connections
     secure: true, // Use SSL/TLS
     auth: {
-      user: "fibrahim_dboard@thundertechsol.com", // Your Gmail address
-      pass: " VERdboard123", // Your Gmail password
+      user: process.env.EmailSender, // Your Gmail address
+      pass: process.env.EmailSenderPassword, // Your Gmail password
     },
   });
 
   // Set up email data with attachment
   let mailOptions = {
-    from: params.from, // Sender address
+    from: process.env.EmailSender, // Sender address
     to: params.to, // List of recipients
     subject: params.subject, // Subject line
     text: params.text, // Plain text body
@@ -46,8 +46,8 @@ exports.sendEmailWithAttachment = function (params) {
     port: 465, // Default SMTP port for secure connections
     secure: true, // Use SSL/TLS
     auth: {
-      user: "fibrahim_dboard@thundertechsol.com", // Your Gmail address
-      pass: " VERdboard123", // Your Gmail password
+      user: process.env.EmailSender, // Your Gmail address
+      pass: process.env.EmailSenderPassword, // Your Gmail password
     },
   });
 
@@ -56,7 +56,7 @@ exports.sendEmailWithAttachment = function (params) {
 
   // Set up email data with attachment
   let mailOptions = {
-    from: params.from, // Sender address
+    from: process.env.EmailSender, // Sender address
     to: params.to, // List of recipients
     subject: params.subject, // Subject line
     text: params.text, // Plain text body
