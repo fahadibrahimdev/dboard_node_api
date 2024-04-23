@@ -1,4 +1,4 @@
-const ENV_ENUM = require ("../Helpers/ENV_ENUM");
+const ENV_ENUM = require("../Helpers/ENV_ENUM");
 
 var myDBName = "";
 if (!!process.env.Environment) {
@@ -15,7 +15,7 @@ if (!!process.env.Environment) {
 
 const mysql = require("mysql");
 const con = mysql.createConnection({
-  host: "23.106.120.176",
+  host: "192.250.235.77",
   user: "thundertechsol_mab",
   password: "MABuser123$",
   database: myDBName,
@@ -25,8 +25,10 @@ con.connect(function (err) {
   if (err) {
     console.log("connection failed!");
     console.log("Error!", err);
-    throw err;
+    console.log("MYSQL Not Connected!");
+    // throw err;
+  } else {
+    console.log("MYSQL Connected!");
   }
-  console.log("Connected!");
 });
 module.exports = con;

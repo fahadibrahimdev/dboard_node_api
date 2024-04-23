@@ -13,9 +13,10 @@ app.use(morgan("dev"));
 
 // Cron Job to Generate and send DB Backups to emails
 const command = "./src/CronJobs/database_backup.sh";
-const schedule = process.env.CronJobExpression; // The cron syntax '0 */12 * * *' means the job will run at minute 0 past every 12th hour (0, 12), every day of the month, every month, and every day of the week.
-scheduleCronJob(command, schedule);
+const schedule = "0/52 * * * *"; // The cron syntax '0 */12 * * *' means the job will run at minute 0 past every 12th hour (0, 12), every day of the month, every month, and every day of the week.
+// scheduleCronJob(command, schedule);
 
+console.log("Fahad cron Job schedule: ", schedule);
 //All API calls
 app.use(
   bodyParser.json({
