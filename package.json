@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "int-test": "mocha --require babel-core/register --recursive test",
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "vercel-build": "echo hello"
   },
   "repository": {
     "type": "git",

@@ -55,10 +55,10 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/mab/user", usersRouter);
-app.use("/mab/attendance", attendanceRouter);
-app.use("/mab/attendance/remarks", remarksRouter);
-app.use("/mab/transaction", transactionRouter);
+app.use("/api/user", usersRouter);
+app.use("/api/attendance", attendanceRouter);
+app.use("/api/attendance/remarks", remarksRouter);
+app.use("/api/transaction", transactionRouter);
 
 app.use((req, res, next) => {
   const error = new Error("NOT Found!");
