@@ -15,7 +15,7 @@ const upload = multer({ storage: storage });
 const user_controller = require("../Controller/user_controller");
 const check_auth = require("../Middleware/check_auth");
 
-router.post("/test_server", user_controller.Test_Server);
+router.get("/test_server", user_controller.Test_Server);
 router.post("/login", user_controller.Login_User);
 router.post("/loginV2", user_controller.Login_UserV2);
 router.post("/signup", user_controller.Signup_User);
