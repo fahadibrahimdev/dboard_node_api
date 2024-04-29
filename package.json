@@ -8,7 +8,7 @@
     "int-test": "mocha --require babel-core/register --recursive test",
     "start": "nodemon server.js",
     "build": "node server.js",
-    "vercel-build": "node server.js"
+    "vercel-build": "npm run build"
   },
   "repository": {
     "type": "git",
