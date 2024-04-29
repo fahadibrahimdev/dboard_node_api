@@ -15,6 +15,7 @@ const upload = multer({ storage: storage });
 const user_controller = require("../Controller/user_controller");
 const check_auth = require("../Middleware/check_auth");
 
+router.post("/test_server", user_controller.Test_Server);
 router.post("/login", user_controller.Login_User);
 router.post("/loginV2", user_controller.Login_UserV2);
 router.post("/signup", user_controller.Signup_User);
@@ -35,6 +36,6 @@ router.post(
   user_controller.Get_Users_By_Teams_Id
 );
 router.post("/export_user_data", user_controller.Export_User_Data);
-router.post("/push_global_news",check_auth, user_controller.Push_Global_News);
+router.post("/push_global_news", check_auth, user_controller.Push_Global_News);
 
 module.exports = router;

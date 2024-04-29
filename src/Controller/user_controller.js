@@ -10,6 +10,16 @@ const Excel = require("exceljs");
 const path = require("path");
 const { pushNotificationMulti } = require("../Utils.js/fireBase.js");
 
+exports.Test_Server = (req, res) => {
+  console.log("Login");
+
+  return res.status(200).json(
+    success("Server is working Fine.", {
+      obj: "Success",
+    })
+  );
+};
+
 exports.Login_User = (req, res) => {
   console.log("Login");
 
