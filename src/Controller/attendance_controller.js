@@ -109,7 +109,6 @@ exports.Create_Attendance = (req, res) => {
       end_time: !!req.body.end_time ? req.body.end_time : null,
       start_time: req.body.start_time,
     };
-
     Attendance.CreateAttendance(params, (err, _data) => {
       if (!err) {
         res.status(202).json(success("Attendance Data", { attendance: _data }));

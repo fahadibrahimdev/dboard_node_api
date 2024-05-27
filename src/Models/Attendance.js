@@ -41,7 +41,6 @@ class Attendance {
         "user_attendances.end_time, " +
         "user_attendances.status, " +
         "user_attendances.leaves, " +
-        "user_attendances.comments, " +
         "user_attendances.created_by, " +
         "ua.full_name AS created_name, " +
         "user_attendances.deleted_by, " +
@@ -89,7 +88,6 @@ class Attendance {
         "user_attendances.end_time, " +
         "user_attendances.status, " +
         "user_attendances.leaves, " +
-        "user_attendances.comments, " +
         "user_attendances.created_by, " +
         "ua.full_name AS created_name, " +
         "user_attendances.deleted_by, " +
@@ -157,14 +155,14 @@ class Attendance {
       console.log("CreateAttendance");
 
       var myQuery =
-        "INSERT INTO user_attendances SET id=NULL," +
+        "INSERT INTO user_attendances SET " +
         "start_time='" +
         body.start_time +
         "',is_active=1," +
         "user_id=" +
         body.UserID +
         "," +
-        "status=1,leaves=0,comments='Testing 123'," +
+        "status=1,leaves=0," +
         "shift_id=" +
         body.shift_id +
         "," +
@@ -182,6 +180,7 @@ class Attendance {
       }
 
       const res = await Query.execute(myQuery);
+      console.log("myQuery", myQuery);
 
       result(null, res);
     } catch (e) {
@@ -241,7 +240,6 @@ class Attendance {
         "user_attendances.end_time, " +
         "user_attendances.status, " +
         "user_attendances.leaves, " +
-        "user_attendances.comments, " +
         "user_attendances.created_by, " +
         "ua.full_name AS created_name, " +
         "user_attendances.deleted_by, " +
